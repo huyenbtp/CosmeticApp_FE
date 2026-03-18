@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   viewAll: {
     fontSize: 14,
     fontWeight: 600,
-    color: Colors.textLight
+    color: Colors.primary
   },
   
   item: {

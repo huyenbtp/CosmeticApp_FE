@@ -8,12 +8,16 @@ export default function ProductCard({ item }: { item: IProduct }) {
       <Image source={{ uri: item.image }} style={styles.image} />
 
       <View style={styles.info}>
+        <Text numberOfLines={2} style={styles.brand}>
+          {item.brand?.toUpperCase()}
+        </Text>
+
         <Text numberOfLines={2} style={styles.name}>
           {item.name}
         </Text>
 
         <Text style={styles.price}>
-          {item.selling_price.toLocaleString()} đ
+          {item.selling_price.toLocaleString()}₫
         </Text>
       </View>
     </TouchableOpacity>
@@ -22,17 +26,26 @@ export default function ProductCard({ item }: { item: IProduct }) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.background,
+    height: 300,
     gap: 12,
+    padding: 6,
+    borderRadius: 6,
     overflow: "hidden",
   },
   image: {
     width: "100%",
     height: 170,
-    borderRadius: 15,
+    borderRadius: 6,
     resizeMode: "cover",
   },
   info: {
-    gap: 8,
+    gap: 4,
+  },
+  brand: {
+    fontSize: 12,
+    fontWeight: "400",
+    color: Colors.textLight
   },
   name: {
     fontSize: 14,

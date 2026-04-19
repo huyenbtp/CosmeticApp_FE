@@ -25,7 +25,7 @@ export default function MainBottomTabs() {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.secondary,
+        tabBarInactiveTintColor: Colors.placeholder,
         tabBarShowLabel: false,
         tabBarStyle: {
           paddingTop: 14,

@@ -1,75 +1,105 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Dimensions, } from "react-native";
 import { Colors } from "../../theme/colors";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import BrandCarousel from "../../components/brand/BrandCarousel";
 import CategoryCarousel from "../../components/category/CategoryCarousel";
 import { IProduct } from "../../types/product";
 import ProductCarousel from "../../components/product/ProductCarousel";
+import ProductCard from "../../components/product/ProductCard";
+import AutoBanner from "./AutoBanner";
 
 const mockRecommendProducts: IProduct[] = [
   {
     _id: "1",
     name: "Son Dior Addict Lip Glow",
+    brand: "Dior",
     selling_price: 850000,
     image: "https://picsum.photos/200/300?random=1",
   },
   {
     _id: "2",
     name: "Kem nền Estee Lauder Double Wear",
+    brand: "Estee Lauder",
     selling_price: 1200000,
     image: "https://picsum.photos/200/300?random=2",
   },
   {
     _id: "3",
-    name: "Son Dior Addict Lip Glow",
-    selling_price: 850000,
+    name: "Son MAC Ruby Woo",
+    brand: "MAC",
+    selling_price: 600000,
     image: "https://picsum.photos/200/300?random=3",
   },
   {
     _id: "4",
-    name: "Kem nền Estee Lauder Double Wear",
-    selling_price: 1200000,
+    name: "Phấn phủ Innisfree",
+    brand: "Innisfree",
+    selling_price: 300000,
     image: "https://picsum.photos/200/300?random=4",
   },
   {
     _id: "5",
     name: "Son Dior Addict Lip Glow",
+    brand: "Dior",
     selling_price: 850000,
     image: "https://picsum.photos/200/300?random=5",
   },
   {
     _id: "6",
     name: "Kem nền Estee Lauder Double Wear",
+    brand: "Estee Lauder",
     selling_price: 1200000,
     image: "https://picsum.photos/200/300?random=6",
   },
 ];
 
+const { width } = Dimensions.get("window");
+const COLUMN_GAP = 12;
+const PADDING_HORIZONTAL = 14;
+const ITEM_WIDTH = (width - PADDING_HORIZONTAL * 2 - COLUMN_GAP) / 2;
+
 export default function HomeScreen() {
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Welcome,</Text>
-      <Text style={styles.name}>Nina</Text>
-
+    <View style={styles.container}>
       <TouchableOpacity style={styles.searchBar}>
-        <Feather name="search" size={20} />
-        <Text style={styles.placeholder}>Search...</Text>
+        <Feather name="search" size={20} color={Colors.placeholder} />
+        <Text style={styles.placeholder}>Search products</Text>
       </TouchableOpacity>
 
-      <BrandCarousel />
+      <FlatList
+        data={mockRecommendProducts}
+        keyExtractor={(item) => item._id}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <ProductCard item={item} />
+          </View>
+        )}
+        contentContainerStyle={styles.productsContainer}
+        columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
 
-      <CategoryCarousel />
+        // 👇 HEADER
+        ListHeaderComponent={
+          <>
+            {/** 
+              <BrandCarousel />
 
-      <View style={styles.section}>
-        <Text style={styles.title}>For you</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAll}>View All</Text>
-        </TouchableOpacity>
-      </View>
+              <CategoryCarousel />
+            */}
 
-      <ProductCarousel data={mockRecommendProducts}/>
+            <View style={styles.bannerContainer}>
+              <AutoBanner />
+            </View>
 
-    </ScrollView>
+            <View style={styles.forYouContainer}>
+              <FontAwesome name="heart" size={16} color={Colors.secondary} />
+              <Text style={styles.title}>For You</Text>
+            </View>
+          </>
+        }
+      />
+    </View>
   );
 }
 
@@ -77,38 +107,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingVertical: 70,
-    paddingHorizontal: 25,
+    paddingTop: 45,
   },
-  header: {
-    fontSize: 25,
-    fontWeight: 700
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: 600,
-    color: Colors.primary
-  },
-
   searchBar: {
-    height: 50,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    paddingHorizontal: 24,
-    gap: 14,
-    backgroundColor: Colors.input,
+    marginHorizontal: PADDING_HORIZONTAL,
+    marginBottom: 12,
+    paddingHorizontal: 16,
+    gap: 12,
+    backgroundColor: Colors.background,
+    borderColor: Colors.primary,
+    borderWidth: 1,
     borderRadius: 30,
+    elevation: 2,
   },
   placeholder: {
     color: Colors.placeholder
   },
 
-  section: {
+  bannerContainer: {
+    backgroundColor: Colors.background,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingHorizontal: PADDING_HORIZONTAL,
+  },
+  forYouContainer: {
+    backgroundColor: Colors.background,
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 30,
-    marginBottom: 15,
+    alignItems: "center",
+    paddingTop: 20,
+    paddingBottom: 16,
+    paddingHorizontal: PADDING_HORIZONTAL,
+    gap: 12,
   },
   title: {
     fontSize: 18,
@@ -118,5 +150,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 600,
     color: Colors.primary
+  },
+
+  productsContainer: {
+    backgroundColor: Colors.surface
+  },
+  row: {
+    paddingHorizontal: PADDING_HORIZONTAL,
+    marginBottom: COLUMN_GAP,
+    gap: COLUMN_GAP,
+  },
+  item: {
+    width: ITEM_WIDTH,
   },
 });

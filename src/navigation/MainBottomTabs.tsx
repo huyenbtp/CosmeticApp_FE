@@ -4,6 +4,7 @@ import HomeScreen from "../screens/home/HomeScreen";
 import CartScreen from "../screens/cart/CartScreen";
 import NotificationScreen from "../screens/notification/NotificationScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
+import ExploreScreen from "../screens/explore/ExploreScreen";
 
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -14,6 +15,7 @@ export type MainBottomTabParamList = {
   Notification: undefined
   Cart: undefined
   Profile: undefined
+  Explore: undefined
 }
 
 const Tab = createBottomTabNavigator<MainBottomTabParamList>();
@@ -50,6 +52,22 @@ export default function MainBottomTabs() {
             <Octicons
               name={focused ? "home-fill" : "home"}
               size={20}
+              color={color}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Explore"
+        component={ExploreScreen}
+        options={{
+          title: "Explore",
+          headerShown: false,
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? "grid" : "grid-outline"}
+              size={22}
               color={color}
             />
           ),

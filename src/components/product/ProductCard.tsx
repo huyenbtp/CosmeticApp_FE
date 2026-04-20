@@ -15,27 +15,32 @@ export default function ProductCard({ item }: { item: IProduct }) {
       <Image source={{ uri: item.image }} style={styles.image} />
 
       <View style={styles.info}>
-        <Text numberOfLines={2} style={styles.brand}>
-          {item.brand?.toUpperCase()}
-        </Text>
+        <View style={styles.part}>
+          <Text numberOfLines={2} style={styles.brand}>
+            {item.brand?.toUpperCase()}
+          </Text>
 
-        <Text numberOfLines={2} style={styles.name}>
-          {item.name}
-        </Text>
+          <Text numberOfLines={2} style={styles.name}>
+            {item.name}
+          </Text>
+        </View>
 
-              <View style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 6
-              }}>
-                <StarRating rating={item.rating} />
-                <Text style={{ color: Colors.textWarning, fontWeight: 500, fontSize: 12 }}>
-                  {item.rating.toFixed(1)}
-                </Text>
-              </View>
-        <Text style={styles.price}>
-          {item.selling_price.toLocaleString()}₫
-        </Text>
+        <View style={styles.part}>
+          <View style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 6
+          }}>
+            <StarRating rating={item.rating} />
+            <Text style={{ color: Colors.textWarning, fontWeight: 500, fontSize: 12 }}>
+              {item.rating.toFixed(1)}
+            </Text>
+          </View>
+
+          <Text style={styles.price}>
+            {item.selling_price.toLocaleString()}₫
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -44,7 +49,7 @@ export default function ProductCard({ item }: { item: IProduct }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.background,
-    height: 300,
+    height: 310,
     gap: 12,
     padding: 6,
     borderRadius: 6,
@@ -57,6 +62,10 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   info: {
+    flex: 1,
+    justifyContent: 'space-between'
+  },
+  part: {
     gap: 4,
   },
   brand: {

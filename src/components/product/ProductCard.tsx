@@ -1,10 +1,17 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { IProduct } from "../../types/product";
 import { Colors } from "../../theme/colors";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
+import StarRating from "../common/StarRating";
 
 export default function ProductCard({ item }: { item: IProduct }) {
+  const navigation = useAppNavigation();
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate("ProductInformation", { product_id: item._id })}
+    >
       <Image source={{ uri: item.image }} style={styles.image} />
 
       <View style={styles.info}>
@@ -16,6 +23,16 @@ export default function ProductCard({ item }: { item: IProduct }) {
           {item.name}
         </Text>
 
+              <View style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 6
+              }}>
+                <StarRating rating={item.rating} />
+                <Text style={{ color: Colors.textWarning, fontWeight: 500, fontSize: 12 }}>
+                  {item.rating.toFixed(1)}
+                </Text>
+              </View>
         <Text style={styles.price}>
           {item.selling_price.toLocaleString()}₫
         </Text>

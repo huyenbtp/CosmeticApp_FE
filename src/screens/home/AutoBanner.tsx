@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.placeholder,
+    backgroundColor: Colors.textPlaceholder,
     margin: 4
   },
   activeDot: {

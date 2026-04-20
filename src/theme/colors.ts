@@ -5,14 +5,15 @@ export const Colors = {
   background: "#ffffff",
   surface: "#FAFAFA",
 
-  input: "#F3F4F5",
+  bgInput: "#F3F4F5",
 
   text: "#000000",
   textLight: "#666666",
-  placeholder: "#AAAAAA",
+  textPlaceholder: "#AAAAAA",
 
   border: "#e5e5e5",
 
-  success: "#4CAF50",
-  error: "#F44336",
+  textSuccess: "#4CAF50",
+  textError: "#F44336",
+  textWarning: "#FFAB07"
 };

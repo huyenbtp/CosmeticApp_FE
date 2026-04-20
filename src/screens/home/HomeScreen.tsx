@@ -7,14 +7,16 @@ import { IProduct } from "../../types/product";
 import ProductCarousel from "../../components/product/ProductCarousel";
 import ProductCard from "../../components/product/ProductCard";
 import AutoBanner from "./AutoBanner";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
 
-const mockRecommendProducts: IProduct[] = [
+export const mockRecommendProducts: IProduct[] = [
   {
     _id: "1",
     name: "Son Dior Addict Lip Glow",
     brand: "Dior",
     selling_price: 850000,
     image: "https://picsum.photos/200/300?random=1",
+    rating: 4.5,
   },
   {
     _id: "2",
@@ -22,6 +24,7 @@ const mockRecommendProducts: IProduct[] = [
     brand: "Estee Lauder",
     selling_price: 1200000,
     image: "https://picsum.photos/200/300?random=2",
+    rating: 4.9,
   },
   {
     _id: "3",
@@ -29,6 +32,7 @@ const mockRecommendProducts: IProduct[] = [
     brand: "MAC",
     selling_price: 600000,
     image: "https://picsum.photos/200/300?random=3",
+    rating: 4.5,
   },
   {
     _id: "4",
@@ -36,6 +40,7 @@ const mockRecommendProducts: IProduct[] = [
     brand: "Innisfree",
     selling_price: 300000,
     image: "https://picsum.photos/200/300?random=4",
+    rating: 5.0,
   },
   {
     _id: "5",
@@ -43,6 +48,7 @@ const mockRecommendProducts: IProduct[] = [
     brand: "Dior",
     selling_price: 850000,
     image: "https://picsum.photos/200/300?random=5",
+    rating: 0,
   },
   {
     _id: "6",
@@ -50,6 +56,7 @@ const mockRecommendProducts: IProduct[] = [
     brand: "Estee Lauder",
     selling_price: 1200000,
     image: "https://picsum.photos/200/300?random=6",
+    rating: 4,
   },
 ];
 
@@ -59,10 +66,12 @@ const PADDING_HORIZONTAL = 14;
 const ITEM_WIDTH = (width - PADDING_HORIZONTAL * 2 - COLUMN_GAP) / 2;
 
 export default function HomeScreen() {
+  const navigation = useAppNavigation();
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.searchBar}>
-        <Feather name="search" size={20} color={Colors.placeholder} />
+        <Feather name="search" size={20} color={Colors.textPlaceholder} />
         <Text style={styles.placeholder}>Search products</Text>
       </TouchableOpacity>
 
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   placeholder: {
-    color: Colors.placeholder
+    color: Colors.textPlaceholder
   },
 
   bannerContainer: {

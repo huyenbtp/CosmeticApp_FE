@@ -215,11 +215,14 @@ export default function ProductInformationScreen() {
                 alignItems: "center",
               }}>
                 <Text style={{ fontWeight: 500, }}>Review</Text>
-                <TouchableOpacity style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                  onPress={() => navigation.navigate("ReviewList", { product_id: data._id })}
+                >
                   <Text style={{ color: Colors.textLight, fontSize: 12, }}>View all</Text>
                   <Ionicons name="chevron-forward-outline" size={14} />
                 </TouchableOpacity>
@@ -239,7 +242,7 @@ export default function ProductInformationScreen() {
               </View>
             </View>
 
-            <View style={{ marginHorizontal: 12, marginTop: 6, gap: 8, }}>
+            <View style={{ marginHorizontal: 12, marginTop: 6, gap: 10, }}>
               {data.reviews.map((item) => (
                 <ReviewCard item={item} key={item._id} />
               ))}
@@ -251,7 +254,7 @@ export default function ProductInformationScreen() {
                 color: Colors.primary,
                 fontWeight: 700,
                 padding: 20,
-                marginTop: 14,
+                marginTop: 20,
               }
             ]}>
               You May Also Like

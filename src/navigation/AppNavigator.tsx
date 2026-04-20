@@ -4,12 +4,14 @@ import OnboardingScreen from "../screens/onboarding/OnboardingScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import MainBottomTabs from "./MainBottomTabs";
 import ProductInformationScreen from "../screens/product/ProductInformationScreen";
+import ReviewListScreen from "../screens/review/ReviewList";
 
 export type RootStackParamList = {
   Onboarding: undefined
   Login: undefined
   Main: undefined
   ProductInformation: { product_id: string }
+  ReviewList: { product_id: string }
   
 }
 
@@ -28,6 +30,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
 
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />
 
+      <Stack.Screen name="ReviewList" component={ReviewListScreen} />
     </Stack.Navigator>
   );
 }

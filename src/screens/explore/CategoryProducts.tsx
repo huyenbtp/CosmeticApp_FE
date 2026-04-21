@@ -4,7 +4,7 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import ProductCard from "../../components/product/ProductCard";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { mockRecommendProducts } from "../home/HomeScreen";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NullFilter } from "./FilterScreen";
 import SortModal, { SortType } from "../../components/common/SortModal";
 
@@ -13,28 +13,26 @@ const COLUMN_GAP = 12;
 const PADDING_HORIZONTAL = 14;
 const ITEM_WIDTH = (width - PADDING_HORIZONTAL * 2 - COLUMN_GAP) / 2;
 
-const mockBrand = {
+const mockCategory = {
   _id: "64f1a2b3che123114",
-  name: "Maybelline",
-  logo: "https://picsum.photos/200/200?random=5",
-  status: "active",
+  name: "Cleanser",
 };
 
-export default function BrandProductsScreen() {
+export default function CategoryProductsScreen() {
   const navigation = useAppNavigation();
   const [openSort, setOpenSort] = useState(false);
 
   const [sortBy, setSortBy] = useState<SortType>("none");
   const [filter, setFilter] = useState(NullFilter);
 
-  const brand = mockBrand;
+  const category = mockCategory;
   const products = mockRecommendProducts;
 
   useEffect(() => {
     console.log("filter: " + filter.minPrice + ", " + filter.maxPrice)
   }, [filter]);
 
-  const isFilterApply = 
+  const isFilterApply =
     filter.minPrice !== NullFilter.minPrice ||
     filter.maxPrice !== NullFilter.maxPrice ||
     filter.skinTypes.length > 0 ||
@@ -47,7 +45,7 @@ export default function BrandProductsScreen() {
           <Ionicons name="chevron-back-outline" size={24} />
         </TouchableOpacity>
 
-        <Text style={styles.title}>{brand.name}</Text>
+        <Text style={styles.title}>{category.name}</Text>
 
         <View style={{ flexDirection: "row", gap: 12 }}>
           <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>

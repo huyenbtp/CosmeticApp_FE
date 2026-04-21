@@ -85,7 +85,7 @@ export default function FilterScreen({ navigation, route }: any) {
   const { currentFilter, handleApply } = route.params;
 
   const [min, setMin] = useState(currentFilter.minPrice ?? 0);
-  const [max, setMax] = useState(currentFilter.maxPrice ?? 2000000);
+  const [max, setMax] = useState(currentFilter.maxPrice ?? 0);
 
   const [skinTypes, setSkinTypes] = useState<ISkinType[]>([]);
   const [tags, setTags] = useState<ITag[]>([]);

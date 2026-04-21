@@ -8,6 +8,7 @@ import ReviewListScreen from "../screens/review/ReviewList";
 import BrandProductsScreen from "../screens/explore/BrandProducts";
 import FilterScreen, { IFilter } from "../screens/explore/FilterScreen";
 import CartScreen from "../screens/cart/CartScreen";
+import CategoryProductsScreen from "../screens/explore/CategoryProducts";
 
 export type RootStackParamList = {
   BrandProducts: { brand_id: string }
@@ -38,6 +39,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
 
       <Stack.Screen name="BrandProducts" component={BrandProductsScreen} />
       <Stack.Screen name="Cart" component={CartScreen} />
+      <Stack.Screen name="CategoryProducts" component={CategoryProductsScreen} />
       <Stack.Screen name="Filter" component={FilterScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />

@@ -1,6 +1,7 @@
-import { View, Text, SectionList, StyleSheet, Image } from "react-native";
+import { View, Text, SectionList, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { IBrand } from "../../types/brand";
 import { Colors } from "../../theme/colors";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
 
 const mockBrands: IBrand[] = [
   {
@@ -63,7 +64,38 @@ const mockBrands: IBrand[] = [
     logo: "https://picsum.photos/seed/sporty/200/200",
     status: "active",
   },
+  {
+    _id: "64f1a2b3c9e123110",
+    name: "Rohto",
+    logo: "https://picsum.photos/200/200?random=1",
+    status: "active",
+  },
+  {
+    _id: "64f1a2b3c9e123310",
+    name: "Cléo",
+    logo: "https://picsum.photos/200/200?random=2",
+    status: "active",
+  },
+  {
+    _id: "64f1a2b3c9e123114",
+    name: "Mizumi",
+    logo: "https://picsum.photos/200/200?random=3",
+    status: "active",
+  },
+  {
+    _id: "64f1a2b3c9e123114",
+    name: "Senka",
+    logo: "https://picsum.photos/200/200?random=4",
+    status: "active",
+  },
+  {
+    _id: "64f1a2b3che123114",
+    name: "Maybelline",
+    logo: "https://picsum.photos/200/200?random=5",
+    status: "active",
+  },
 ];
+
 function groupByAlphabet(data: IBrand[]) {
   const grouped: { [key: string]: IBrand[] } = {};
 
@@ -89,6 +121,7 @@ function groupByAlphabet(data: IBrand[]) {
 
 export default function BrandScreen() {
   const sections = groupByAlphabet(mockBrands);
+  const navigation = useAppNavigation();
 
   return (
     <SectionList
@@ -96,10 +129,13 @@ export default function BrandScreen() {
       keyExtractor={(item) => item._id}
 
       renderItem={({ item }) => (
-        <View style={styles.item}>
+        <TouchableOpacity
+          style={styles.item}
+          onPress={() => { navigation.navigate("BrandProducts", { brand_id: item._id }) }}
+        >
           <Text style={styles.name}>{item.name}</Text>
           <Image source={{ uri: item.logo }} style={styles.logo} />
-        </View>
+        </TouchableOpacity>
       )}
 
       renderSectionHeader={({ section: { title } }) => (

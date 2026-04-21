@@ -171,11 +171,14 @@ export default function ProductInformationScreen() {
                 <Text style={{ color: Colors.textLight, fontSize: 13, }}>Brand:</Text>
                 <Text style={{ fontWeight: 500, fontSize: 13, }}>{data.brand.name}</Text>
               </View>
-              <TouchableOpacity style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 8,
-              }}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+                onPress={() => navigation.navigate("BrandProducts", { brand_id: data.brand._id })}
+              >
                 <Text style={{ color: Colors.textLight, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />
               </TouchableOpacity>

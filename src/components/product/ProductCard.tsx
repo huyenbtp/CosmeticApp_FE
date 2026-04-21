@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 6,
     overflow: "hidden",
+    elevation: 1
   },
   image: {
     width: "100%",

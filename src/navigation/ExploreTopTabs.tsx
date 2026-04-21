@@ -14,7 +14,10 @@ export default function ExploreTopTabs() {
         },
         tabBarIndicatorStyle: {
           backgroundColor: Colors.primary,
-          marginHorizontal: 60
+          marginHorizontal: 60,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          height: 3.5
         },
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.textLight,

@@ -10,15 +10,19 @@ import FilterScreen, { IFilter } from "../screens/explore/FilterScreen";
 import CartScreen from "../screens/cart/CartScreen";
 import CategoryProductsScreen from "../screens/explore/CategoryProducts";
 import ProfileInformationScreen from "../screens/profile/ProfileInformationScreen";
+import AddressListScreen from "../screens/profile/AddressListScreen";
 
 export type RootStackParamList = {
+  AddressList: undefined
   BrandProducts: { brand_id: string }
   Cart: undefined
   CategoryProducts: { category_id: string }
+  ChangePassword: undefined
   Filter: { currentFilter: IFilter, handleApply: (filter: IFilter) => void }
   Login: undefined
   Main: undefined
   Onboarding: undefined
+  OrderInformation: undefined
   ProductInformation: { product_id: string }
   ProfileInformation: undefined
   ReviewList: { product_id: string }
@@ -39,6 +43,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
     >
       <Stack.Screen name="Main" component={MainBottomTabs} />
 
+      <Stack.Screen name="AddressList" component={AddressListScreen} />
       <Stack.Screen name="BrandProducts" component={BrandProductsScreen} />
       <Stack.Screen name="Cart" component={CartScreen} />
       <Stack.Screen name="CategoryProducts" component={CategoryProductsScreen} />
@@ -46,8 +51,8 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />
-      <Stack.Screen name="ReviewList" component={ReviewListScreen} />
       <Stack.Screen name="ProfileInformation" component={ProfileInformationScreen} />
+      <Stack.Screen name="ReviewList" component={ReviewListScreen} />
     </Stack.Navigator>
   );
 }

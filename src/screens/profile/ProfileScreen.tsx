@@ -56,7 +56,7 @@ export default function ProfileScreen() {
               <FontAwesome6 name="user-circle" size={30} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Personal Information</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AddressList")}>
               <FontAwesome6 name="map-location-dot" size={30} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Shipping Address</Text>
             </TouchableOpacity>

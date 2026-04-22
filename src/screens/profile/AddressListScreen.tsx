@@ -1,0 +1,163 @@
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, } from "react-native";
+import { Colors } from "../../theme/colors";
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
+import Header from "../../components/common/Header";
+import { IUserAddress } from "../../types/userAddress";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+const mockAddresses: IUserAddress[] = [
+  {
+    _id: "1",
+    user_id: "1",
+    receiver_name: "Huyen Bui",
+    phone: "0987654321",
+    address_line: "Trường ĐH Công nghệ thông tin, Đường Hàn Thuyên",
+    ward: "Phường Linh Xuân",
+    district: "Quận Thủ Đức",
+    city: "Tp. Hồ Chí Minh",
+    is_default: true,
+  },
+  {
+    _id: "2",
+    user_id: "1",
+    receiver_name: "Huyen Bui",
+    phone: "0987654321",
+    address_line: "Trường ĐH Công nghệ thông tin, Đường Hàn Thuyên",
+    ward: "Phường Linh Xuân",
+    district: "Quận Thủ Đức",
+    city: "Tp. Hồ Chí Minh",
+    is_default: false,
+  },
+];
+
+export default function AddressListScreen() {
+  const navigation = useAppNavigation();
+  const insets = useSafeAreaInsets();
+
+  const data = mockAddresses;
+
+  return (
+    <View style={styles.container}>
+      <Header title="My Address" />
+
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <View style={styles.item} key={item._id}>
+            <View style={styles.row}>
+              <Text style={styles.name}>{item.receiver_name} | {item.phone}</Text>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.address}>
+              {item.address_line + ", " + item.ward + ", " + item.district + ", " + item.city}
+            </Text>
+            {item.is_default &&
+              <View style={styles.row}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>Default</Text>
+                </View>
+              </View>
+            }
+          </View>
+        )}
+        contentContainerStyle={{}}
+        ListEmptyComponent={
+          <Text style={{ textAlign: "center", marginTop: 50 }}>
+            Add a shipping address
+          </Text>
+        }
+      />
+
+      {/* Bottom */}
+      <View style={[styles.footerContainer, { marginBottom: insets.bottom }]}>
+        <TouchableOpacity style={styles.addButton}>
+          <Text style={styles.addButtonText}>ADD A SHIPPING ADDRESS</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.surface,
+  },
+
+  item: {
+    backgroundColor: Colors.card,
+    padding: 18,
+    gap: 12,
+    borderColor: Colors.divider,
+    marginBottom: 6,
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  name: {
+    fontSize: 13,
+    fontWeight: 700,
+  },
+  address: {
+    fontSize: 12,
+    color: Colors.textSecondary
+  },
+
+  button: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
+  },
+  buttonText: {
+    fontSize: 12,
+    color: Colors.secondary
+  },
+
+  badge: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 20,
+    backgroundColor: Colors.secondary,
+  },
+  badgeText: {
+    color: Colors.textInverse,
+    fontSize: 10,
+    fontWeight: 500,
+  },
+
+  footerContainer: {
+    padding: 16,
+    borderTopWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.background,
+    gap: 24,
+  },
+  totalLabel: {
+    fontWeight: "500",
+    fontSize: 12,
+    marginLeft: 8,
+  },
+  addButton: {
+    alignItems: "center",
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderRadius: 30,
+  },
+  addButtonText: {
+    color: Colors.textInverse,
+    fontWeight: "500",
+    fontSize: 12,
+  },
+});

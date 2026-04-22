@@ -9,6 +9,7 @@ import BrandProductsScreen from "../screens/explore/BrandProducts";
 import FilterScreen, { IFilter } from "../screens/explore/FilterScreen";
 import CartScreen from "../screens/cart/CartScreen";
 import CategoryProductsScreen from "../screens/explore/CategoryProducts";
+import ProfileInformationScreen from "../screens/profile/ProfileInformationScreen";
 
 export type RootStackParamList = {
   BrandProducts: { brand_id: string }
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   Main: undefined
   Onboarding: undefined
   ProductInformation: { product_id: string }
+  ProfileInformation: undefined
   ReviewList: { product_id: string }
   Search: undefined
   SearchResults: { keyword: string }
@@ -45,6 +47,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />
       <Stack.Screen name="ReviewList" component={ReviewListScreen} />
+      <Stack.Screen name="ProfileInformation" component={ProfileInformationScreen} />
     </Stack.Navigator>
   );
 }

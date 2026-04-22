@@ -1,8 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
 
 export default function ProfileScreen() {
+  const navigation = useAppNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -49,9 +52,9 @@ export default function ProfileScreen() {
           <Text style={styles.sectionTitle}>Account Information</Text>
 
           <View style={styles.row}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ProfileInformation")}>
               <FontAwesome6 name="user-circle" size={30} style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Profile</Text>
+              <Text style={styles.buttonText}>Personal Information</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
               <FontAwesome6 name="map-location-dot" size={30} style={styles.buttonIcon} />
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    paddingTop: 70,
+    paddingTop: 64,
     paddingBottom: 36,
     paddingHorizontal: 20,
   },
@@ -182,7 +185,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 10,
-    color: Colors.textLight
+    color: Colors.textLight,
+    textAlign: "center"
   },
 
   generalItemText: {

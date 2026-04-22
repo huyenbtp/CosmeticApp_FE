@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   date: {
-    color: Colors.textLight,
+    color: Colors.textSecondary,
     fontSize: 11,
     fontWeight: "600",
   },
   comment: {
-    color: Colors.textLight,
+    color: Colors.textSecondary,
     fontSize: 12,
     fontWeight: "600",
   },

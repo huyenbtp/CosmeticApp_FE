@@ -172,14 +172,14 @@ export default function CategoryScreen() {
           >
             <Feather
               name="shopping-bag" size={30}
-              color={selectedIndex === index ? Colors.primary : Colors.textLight}
+              color={selectedIndex === index ? Colors.primary : Colors.textSecondary}
             />
             <Text
               style={{
                 fontWeight: "700",
                 fontSize: 10,
                 textAlign: "center",
-                color: selectedIndex === index ? Colors.primary : Colors.textLight
+                color: selectedIndex === index ? Colors.primary : Colors.textSecondary
               }}
             >
               {cat.name}
@@ -209,7 +209,7 @@ export default function CategoryScreen() {
                   onPress={() => navigation.navigate("CategoryProducts", { category_id: item._id })}
                 >
                   <Text style={styles.viewAllText}>View all</Text>
-                  <Ionicons name="chevron-forward" size={15} color={Colors.textLight} />
+                  <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
                 </TouchableOpacity>
               </View>
 
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontWeight: "600",
     fontSize: 12,
-    color: Colors.textSecondary,
+    color: Colors.textLight,
     marginBottom: 4,
   },
 

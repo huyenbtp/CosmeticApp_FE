@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "../screens/home/HomeScreen";
-import CartScreen from "../screens/cart/CartScreen";
 import NotificationScreen from "../screens/notification/NotificationScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import ExploreScreen from "../screens/explore/ExploreScreen";
@@ -13,7 +12,6 @@ import { Colors } from "../theme/colors";
 export type MainBottomTabParamList = {
   Home: undefined
   Notification: undefined
-  Cart: undefined
   Profile: undefined
   Explore: undefined
 }
@@ -67,22 +65,6 @@ export default function MainBottomTabs() {
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
               name={focused ? "grid" : "grid-outline"}
-              size={22}
-              color={color}
-            />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Cart"
-        component={CartScreen}
-        options={{
-          title: "Cart",
-          headerShown: false,
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? "cart" : "cart-outline"}
               size={22}
               color={color}
             />

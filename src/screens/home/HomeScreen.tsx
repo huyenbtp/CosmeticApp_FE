@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Dimensions, } from "react-native";
 import { Colors } from "../../theme/colors";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import BrandCarousel from "../../components/brand/BrandCarousel";
 import CategoryCarousel from "../../components/category/CategoryCarousel";
 import { IProduct } from "../../types/product";
@@ -8,6 +8,7 @@ import ProductCarousel from "../../components/product/ProductCarousel";
 import ProductCard from "../../components/product/ProductCard";
 import AutoBanner from "./AutoBanner";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
+import Header from "../../components/common/Header";
 
 export const mockRecommendProducts: IProduct[] = [
   {
@@ -70,10 +71,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.searchBar}>
-        <Feather name="search" size={20} color={Colors.textPlaceholder} />
-        <Text style={styles.placeholder}>Search products</Text>
-      </TouchableOpacity>
+      <Header hasGoBack={false} hasSearchBar hasCart />
 
       <FlatList
         data={mockRecommendProducts}
@@ -116,24 +114,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingTop: 45,
-  },
-  searchBar: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: PADDING_HORIZONTAL,
-    marginBottom: 12,
-    paddingHorizontal: 16,
-    gap: 12,
-    backgroundColor: Colors.background,
-    borderColor: Colors.primary,
-    borderWidth: 1,
-    borderRadius: 30,
-    elevation: 2,
-  },
-  placeholder: {
-    color: Colors.textPlaceholder
   },
 
   bannerContainer: {

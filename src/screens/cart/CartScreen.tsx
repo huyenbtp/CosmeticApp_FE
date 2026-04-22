@@ -6,6 +6,7 @@ import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { useState } from "react";
 import { ICartItem } from "../../types/cartItem";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Header from "../../components/common/Header";
 
 const mockCartItem = [
   {
@@ -127,13 +128,7 @@ export default function CartScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={24} />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Cart</Text>
-      </View>
+      <Header title="Cart" />
 
       <FlatList
         data={data}
@@ -178,19 +173,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bgInput,
   },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 14,
-    paddingTop: 45,
-    paddingBottom: 12,
-    backgroundColor: Colors.background,
-    gap: 18,
-  },
-  title: {
-    fontWeight: 700,
-    fontSize: 16,
-  },
 
   item: {
     flexDirection: "row",
@@ -229,7 +211,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 10,
-    color: Colors.textLight,
+    color: Colors.textSecondary,
   },
 
   row: {

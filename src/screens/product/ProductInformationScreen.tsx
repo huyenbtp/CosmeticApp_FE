@@ -7,6 +7,7 @@ import StarRating from "../../components/common/StarRating";
 import ProductCard from "../../components/product/ProductCard";
 import { mockRecommendProducts } from "../home/HomeScreen";
 import ReviewCard from "../../components/review/ReviewCard";
+import Header from "../../components/common/Header";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -64,20 +65,7 @@ export default function ProductInformationScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={24} />
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: "row", gap: 12 }}>
-          <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-            <Ionicons name="cart-outline" size={24} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-            <MaterialIcons name="more-vert" size={24} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header hasCart />
 
       <FlatList
         data={mockRecommendProducts}
@@ -137,7 +125,7 @@ export default function ProductInformationScreen() {
                   gap: 6
                 }}>
                   <StarRating rating={data.rating} />
-                  <Text style={{ color: Colors.textLight, fontWeight: 500, fontSize: 12 }}>
+                  <Text style={{ color: Colors.textSecondary, fontWeight: 500, fontSize: 12 }}>
                     {data.numberOfReview} review
                   </Text>
                 </View>
@@ -147,7 +135,7 @@ export default function ProductInformationScreen() {
                   alignItems: "center",
                   gap: 4,
                 }}>
-                  <Text style={{ color: Colors.textLight, fontSize: 12, }}>SKU:</Text>
+                  <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>SKU:</Text>
                   <Text style={{ fontWeight: 500, fontSize: 12, }}>{data.sku}</Text>
                 </View>
               </View>
@@ -168,7 +156,7 @@ export default function ProductInformationScreen() {
                 alignItems: "center",
                 gap: 4,
               }}>
-                <Text style={{ color: Colors.textLight, fontSize: 13, }}>Brand:</Text>
+                <Text style={{ color: Colors.textSecondary, fontSize: 13, }}>Brand:</Text>
                 <Text style={{ fontWeight: 500, fontSize: 13, }}>{data.brand.name}</Text>
               </View>
               <TouchableOpacity
@@ -179,7 +167,7 @@ export default function ProductInformationScreen() {
                 }}
                 onPress={() => navigation.navigate("BrandProducts", { brand_id: data.brand._id })}
               >
-                <Text style={{ color: Colors.textLight, fontSize: 12, }}>View more</Text>
+                <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />
               </TouchableOpacity>
             </View>
@@ -205,7 +193,7 @@ export default function ProductInformationScreen() {
                 alignItems: "center",
                 gap: 8,
               }}>
-                <Text style={{ color: Colors.textLight, fontSize: 12, }}>View more</Text>
+                <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />
               </TouchableOpacity>
             </View>
@@ -226,7 +214,7 @@ export default function ProductInformationScreen() {
                   }}
                   onPress={() => navigation.navigate("ReviewList", { product_id: data._id })}
                 >
-                  <Text style={{ color: Colors.textLight, fontSize: 12, }}>View all</Text>
+                  <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View all</Text>
                   <Ionicons name="chevron-forward-outline" size={14} />
                 </TouchableOpacity>
               </View>
@@ -239,7 +227,7 @@ export default function ProductInformationScreen() {
                 <Text style={{ color: Colors.textWarning, fontWeight: 500, fontSize: 12 }}>
                   {data.rating.toFixed(1)}
                 </Text>
-                <Text style={{ color: Colors.textLight, fontSize: 10 }}>
+                <Text style={{ color: Colors.textSecondary, fontSize: 10 }}>
                   ({data.numberOfReview} review)
                 </Text>
               </View>
@@ -290,15 +278,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.surface,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 14,
-    paddingTop: 45,
-    paddingBottom: 12,
-    backgroundColor: Colors.background,
   },
 
   sectionContainer: {

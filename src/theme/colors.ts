@@ -16,9 +16,9 @@ export const Colors = {
 
   // Text
   text: "#000000",
-  textLight: "#666666",
+  textSecondary: "#666666",
   textMuted: "#7e7e7e",
-  textSecondary: "#999999",
+  textLight: "#999999",
   textPlaceholder: "#AAAAAA",
   textInverse: "#FFFFFF",
 

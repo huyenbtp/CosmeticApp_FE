@@ -103,6 +103,6 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontWeight: 500,
-    color: Colors.textLight
+    color: Colors.textSecondary
   },
 });

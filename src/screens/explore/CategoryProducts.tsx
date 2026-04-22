@@ -7,6 +7,7 @@ import { mockRecommendProducts } from "../home/HomeScreen";
 import { useEffect, useState } from "react";
 import { NullFilter } from "./FilterScreen";
 import SortModal, { SortType } from "../../components/common/SortModal";
+import Header from "../../components/common/Header";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -40,19 +41,7 @@ export default function CategoryProductsScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={24} />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>{category.name}</Text>
-
-        <View style={{ flexDirection: "row", gap: 12 }}>
-          <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>
-            <Ionicons name="cart-outline" size={24} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header title={category.name} hasCart />
 
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -98,18 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.surface,
   },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 14,
-    paddingTop: 45,
-    paddingBottom: 12,
-    backgroundColor: Colors.background,
-  },
-  title: {
-    fontWeight: 700,
-  },
 
   filterContainer: {
     flexDirection: "row",
@@ -127,7 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   inactiveFilter: {
-    color: Colors.textLight
+    color: Colors.textSecondary
   },
   activeFilter: {
     color: Colors.secondary

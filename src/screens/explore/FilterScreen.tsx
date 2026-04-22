@@ -3,6 +3,7 @@ import RangeSlider from "rn-range-slider";
 import { useState } from "react";
 import { Colors } from "../../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
+import Header from "../../components/common/Header";
 
 export interface IFilter {
   minPrice: number;
@@ -92,12 +93,7 @@ export default function FilterScreen({ navigation, route }: any) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.title}>Filter</Text>
-      </View>
+      <Header title="Filter" />
 
       {/** price range */}
       <View style={styles.section}>
@@ -212,18 +208,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.surface,
   },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 14,
-    paddingTop: 45,
-    paddingBottom: 12,
-    backgroundColor: Colors.background,
-    gap: 12,
-  },
-  title: {
-    fontWeight: 700,
-  },
 
   section: {
     backgroundColor: Colors.background,
@@ -248,7 +232,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   itemText: {
-    color: Colors.textLight,
+    color: Colors.textSecondary,
     fontWeight: 500,
     fontSize: 12,
   },

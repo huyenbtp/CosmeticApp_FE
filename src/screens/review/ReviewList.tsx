@@ -4,6 +4,7 @@ import { IReview } from "../../types/review";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import ReviewCard from "../../components/review/ReviewCard";
+import Header from "../../components/common/Header";
 
 const mockReviews: IReview[] = [
   {
@@ -29,13 +30,7 @@ export default function ReviewListScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back-outline" size={24} />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>All reviews</Text>
-      </View>
+      <Header title="All reviews" />
 
       <FlatList
         data={data}

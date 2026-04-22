@@ -20,11 +20,15 @@ export default function ExploreTopTabs() {
           height: 3.5
         },
         tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.textLight,
+        tabBarInactiveTintColor: Colors.textSecondary,
         tabBarStyle: {
           backgroundColor: Colors.background,
           elevation: 0
         },
+        tabBarItemStyle: {
+          paddingTop: 0,
+          minHeight: 0
+        }
       }}
     >
       <Tab.Screen name="Category" component={CategoryTab} />

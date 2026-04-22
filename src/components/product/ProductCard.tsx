@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 12,
     fontWeight: "400",
-    color: Colors.textLight
+    color: Colors.textSecondary
   },
   name: {
     fontSize: 14,

@@ -126,10 +126,10 @@ export default function FilterScreen({ navigation, route }: any) {
           alignItems: 'center',
         }}>
           <Text style={{ fontSize: 12 }}>
-            {min.toLocaleString()}đ
+            {min.toLocaleString()}₫
           </Text>
           <Text style={{ fontWeight: 600, fontSize: 12 }}>
-            {max.toLocaleString()}đ
+            {max.toLocaleString()}₫
           </Text>
         </View>
       </View>

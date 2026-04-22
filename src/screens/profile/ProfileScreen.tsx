@@ -1,10 +1,118 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Colors } from "../../theme/colors";
+import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
 
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Profile Screen</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerTitle}>Welcome, Huyen !</Text>
+      </View>
+
+      <View style={styles.infoContainer}>
+        {/** My Orders*/}
+        <View style={styles.section}>
+          <View style={styles.row}>
+            <Text style={styles.sectionTitle}>My Orders</Text>
+
+            <TouchableOpacity
+              style={styles.viewAllButton}
+              onPress={() => { }}
+            >
+              <Text style={styles.viewAllText}>View all</Text>
+              <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.button}>
+              <MaterialIcons name="hourglass-empty" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Pending</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Octicons name="checklist" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Confirmed</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Feather name="truck" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Shipping</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <MaterialCommunityIcons name="star-circle-outline" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Delivered</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/** Account Information*/}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Account Information</Text>
+
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.button}>
+              <FontAwesome6 name="user-circle" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <FontAwesome6 name="map-location-dot" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Shipping Address</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Ionicons name="heart-outline" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Wishlist</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <MaterialCommunityIcons name="history" size={30} style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>View History</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/** General*/}
+        <View style={[styles.section, { paddingBottom: 24 }]}>
+          <Text style={styles.sectionTitle}>General</Text>
+
+          <TouchableOpacity style={styles.row}>
+            <View style={styles.row}>
+              <Feather name="unlock" size={20} style={styles.buttonIcon} />
+              <Text style={styles.generalItemText}>Change Password</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.row}>
+            <View style={styles.row}>
+              <Octicons name="bell" size={20} style={styles.buttonIcon} />
+              <Text style={styles.generalItemText}>Notifications</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.row}>
+            <View style={styles.row}>
+              <Feather name="moon" size={20} style={styles.buttonIcon} />
+              <Text style={styles.generalItemText}>Dark Mode</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.row}>
+            <View style={styles.row}>
+              <MaterialIcons name="language" size={20} style={styles.buttonIcon} />
+              <Text style={styles.generalItemText}>Language</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+
+        {/** Log out*/}
+        <View style={styles.section}>
+          <TouchableOpacity style={[styles.button, { flexDirection: "row" }]}>
+            <Feather name="log-out" size={20} />
+            <Text>Log out</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -12,12 +120,73 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: Colors.secondary500,
   },
 
-  text: {
-    fontSize: 20,
+  headerContainer: {
+    paddingTop: 70,
+    paddingBottom: 36,
+    paddingHorizontal: 20,
   },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: 600,
+    color: Colors.textInverse,
+  },
+
+  infoContainer: {
+    flex: 1,
+    backgroundColor: Colors.bgSecondary,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: "hidden",
+    gap: 14,
+  },
+
+  section: {
+    backgroundColor: Colors.background,
+    padding: 18,
+    gap: 30,
+  },
+  sectionTitle: {
+    fontWeight: 600,
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+  },
+  viewAllButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 4,
+  },
+  viewAllText: {
+    fontWeight: "600",
+    fontSize: 12,
+    color: Colors.textLight,
+    marginBottom: 4,
+  },
+
+  button: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+  },
+  buttonIcon: {
+    color: Colors.primary500
+  },
+  buttonText: {
+    fontSize: 10,
+    color: Colors.textLight
+  },
+
+  generalItemText: {
+    fontSize: 12,
+    color: Colors.textSecondary
+  }
 });

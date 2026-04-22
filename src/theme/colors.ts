@@ -1,7 +1,25 @@
 export const Colors = {
   primary: "#a0a488",
-  secondary: "#F58086",
+  secondary: "#f58086",
 
+  primary50: "#f5f6f2",
+  primary100: "#e6e8df",
+  primary200: "#cfd3c2",
+  primary300: "#b8bfa5",
+  primary400: "#a0a488",
+  primary500: "#8a8f72",
+  primary600: "#73795c",
+  primary700: "#5c6247",
+
+  secondary50: "#fff2f3",
+  secondary100: "#ffd6d9",
+  secondary200: "#ffb3b8",
+  secondary300: "#ff9097",
+  secondary400: "#f58086",
+  secondary500: "#e0666c",
+  secondary600: "#c94d53",
+  secondary700: "#a83a3f",
+  
   // Background
   background: "#ffffff",
   bgSecondary: "#FAFAFA",

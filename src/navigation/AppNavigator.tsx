@@ -11,6 +11,7 @@ import CartScreen from "../screens/cart/CartScreen";
 import CategoryProductsScreen from "../screens/explore/CategoryProducts";
 import ProfileInformationScreen from "../screens/profile/ProfileInformationScreen";
 import AddressListScreen from "../screens/profile/AddressListScreen";
+import MyOrdersScreen from "../screens/order/MyOrders/MyOrdersScreen";
 
 export type RootStackParamList = {
   AddressList: undefined
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Filter: { currentFilter: IFilter, handleApply: (filter: IFilter) => void }
   Login: undefined
   Main: undefined
+  MyOrders: { initialRoute: string }
   Onboarding: undefined
   OrderInformation: undefined
   ProductInformation: { product_id: string }
@@ -38,7 +40,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
 
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, }}
       initialRouteName={initialRoute}
     >
       <Stack.Screen name="Main" component={MainBottomTabs} />
@@ -49,6 +51,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="CategoryProducts" component={CategoryProductsScreen} />
       <Stack.Screen name="Filter" component={FilterScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />
       <Stack.Screen name="ProfileInformation" component={ProfileInformationScreen} />

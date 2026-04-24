@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
@@ -7,7 +7,7 @@ export default function ProfileScreen() {
   const navigation = useAppNavigation();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Welcome, Huyen !</Text>
       </View>
@@ -20,7 +20,7 @@ export default function ProfileScreen() {
 
             <TouchableOpacity
               style={styles.viewAllButton}
-              onPress={() => { }}
+              onPress={() => navigation.navigate("MyOrders", { initialRoute: "All Orders" })}
             >
               <Text style={styles.viewAllText}>View all</Text>
               <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
@@ -28,19 +28,19 @@ export default function ProfileScreen() {
           </View>
 
           <View style={styles.row}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("MyOrders", { initialRoute: "Pending" })}>
               <MaterialIcons name="hourglass-empty" size={30} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Pending</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("MyOrders", { initialRoute: "Confirmed" })}>
               <Octicons name="checklist" size={30} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Confirmed</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("MyOrders", { initialRoute: "Shipping" })}>
               <Feather name="truck" size={30} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Shipping</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("MyOrders", { initialRoute: "Delivered" })}>
               <MaterialCommunityIcons name="star-circle-outline" size={30} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>Delivered</Text>
             </TouchableOpacity>
@@ -109,14 +109,12 @@ export default function ProfileScreen() {
         </View>
 
         {/** Log out*/}
-        <View style={styles.section}>
-          <TouchableOpacity style={[styles.button, { flexDirection: "row" }]}>
-            <Feather name="log-out" size={20} />
-            <Text>Log out</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.logoutButton}>
+          <Feather name="log-out" size={20} />
+          <Text>Log out</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -192,5 +190,14 @@ const styles = StyleSheet.create({
   generalItemText: {
     fontSize: 12,
     color: Colors.textSecondary
-  }
+  },
+
+  logoutButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 18,
+    gap: 10,
+    backgroundColor: Colors.background,
+  },
 });

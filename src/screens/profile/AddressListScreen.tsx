@@ -143,11 +143,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     gap: 24,
   },
-  totalLabel: {
-    fontWeight: "500",
-    fontSize: 12,
-    marginLeft: 8,
-  },
   addButton: {
     alignItems: "center",
     backgroundColor: Colors.primary,

@@ -4,9 +4,18 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import Header from "../../components/common/Header";
 
+const mockUser = {
+  username: "ikikasumi",
+  name: "Phuong Huyen",
+  gender: "female",
+  phone: "0912345678",
+  email: "huyenbtp2005@gmail.com",
+};
 
 export default function ProfileInformationScreen() {
   const navigation = useAppNavigation();
+
+  const user = mockUser;
 
   return (
     <View style={styles.container}>
@@ -15,41 +24,31 @@ export default function ProfileInformationScreen() {
       <View style={styles.info}>
         <View style={styles.row}>
           <Text style={styles.label}>Username</Text>
-          <Text style={styles.value}>ikikasumi</Text>
+          <Text style={styles.value}>{user.username}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Name</Text>
-          <Text style={styles.value}>Huyen Bui</Text>
+          <Text style={styles.value}>{user.name}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Gender</Text>
-          <Text style={styles.value}>Female</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Date of Birth</Text>
-          <Text style={styles.value}>31/10/2005</Text>
-        </View>
-
-        <View style={styles.row}>
-          <Text style={styles.label}>Skin Type</Text>
-          <Text style={styles.value}>Normal</Text>
+          <Text style={styles.value}>{user.gender}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Phone Number</Text>
-          <Text style={styles.value}>0987654321</Text>
+          <Text style={styles.value}>{user.phone}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>huyenbtp2005@gmail.com</Text>
+          <Text style={styles.value}>{user.email}</Text>
         </View>
 
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EditProfile")}>
         <Feather name="edit-3" size={20} style={styles.buttonText} />
         <Text style={styles.buttonText}>Edit</Text>
       </TouchableOpacity>
@@ -93,6 +92,6 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   buttonText: {
-    color: Colors.primary
+    color: Colors.primary500
   }
 });

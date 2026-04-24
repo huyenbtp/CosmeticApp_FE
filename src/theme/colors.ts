@@ -25,7 +25,7 @@ export const Colors = {
   bgSecondary: "#FAFAFA",
   bgMuted: "#F9F9F9",
   bgInput: "#F3F4F5",
-  bgDisabled: "#E0E0E0",
+  bgDisabled: "#eeeeee",
   bgOverlay: "rgba(0,0,0,0.3)",
 
   // Surface / Card

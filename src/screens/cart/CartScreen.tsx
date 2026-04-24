@@ -81,7 +81,8 @@ export default function CartScreen() {
         <Checkbox
           value={cartItemID.includes(item._id)}
           onValueChange={(value) => toggleSelect(item._id, value)}
-          color={Colors.primary}
+          style={{ borderRadius: 5 }}
+          color={Colors.primary500}
         />
       </View>
       <View style={styles.infoContainer}>
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
   },
   checkoutBtn: {
     alignItems: "center",
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primary500,
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderRadius: 30,

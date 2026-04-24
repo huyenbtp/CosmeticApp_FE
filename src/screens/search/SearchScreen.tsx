@@ -31,7 +31,7 @@ export default function SearchScreen() {
               <Ionicons name="chevron-back-outline" size={24} />
             </TouchableOpacity>
 
-            <SearchBar onSearch={() => { }} />
+            <SearchBar onSearch={(q) => { navigation.navigate("SearchResults", { keyword: q }) }} />
           </View>
 
           <View style={styles.bodyContainer}>
@@ -45,12 +45,17 @@ export default function SearchScreen() {
             </View>
 
             {history.map((item) => (
-              <TouchableOpacity style={styles.item} onPress={() => handleDeleteItem(item._id)}>
-                <Text style={styles.itemText}>
-                  {item.keyword}
-                </Text>
-                <Feather name="x" size={20} color={Colors.textSecondary} />
-              </TouchableOpacity>
+              <View key={item._id} style={styles.item}>
+                <TouchableOpacity onPress={() => navigation.navigate("SearchResults", { keyword: item.keyword })}>
+                  <Text style={styles.itemText}>
+                    {item.keyword}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => handleDeleteItem(item._id)}>
+                  <Feather name="x" size={20} color={Colors.textSecondary} />
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>

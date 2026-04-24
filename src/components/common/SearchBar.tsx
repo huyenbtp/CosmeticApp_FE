@@ -33,6 +33,7 @@ export default function SearchBar({
         placeholderTextColor={Colors.textPlaceholder}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        onSubmitEditing={() => onSearch(searchQuery)}
         style={styles.input}
       />
 

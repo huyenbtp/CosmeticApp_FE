@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondary300,
     borderWidth: 1,
     borderRadius: 30,
-    elevation: 2,
   },
   placeholder: {
     color: Colors.textPlaceholder

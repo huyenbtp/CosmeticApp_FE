@@ -34,7 +34,9 @@ export default function ProfileInformationScreen() {
 
         <View style={styles.row}>
           <Text style={styles.label}>Gender</Text>
-          <Text style={styles.value}>{user.gender}</Text>
+          <Text style={styles.value}>
+            {user.gender === "male" ? "Male" : user.gender === "female" ? "Female" : "Prefer not to say"}
+            </Text>
         </View>
 
         <View style={styles.row}>

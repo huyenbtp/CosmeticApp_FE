@@ -13,7 +13,7 @@ import { Feather, Fontisto, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import Header from "../../components/common/Header";
 
-type Gender = "male" | "female" | "other";
+export type Gender = "male" | "female" | "other";
 
 export default function EditProfileScreen() {
   const navigation = useAppNavigation();

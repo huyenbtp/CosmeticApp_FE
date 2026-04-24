@@ -35,7 +35,10 @@ export default function Header({
       }
 
       {hasSearchBar &&
-        <TouchableOpacity style={styles.searchBar}>
+        <TouchableOpacity
+          style={styles.searchBar}
+          onPress={() => navigation.navigate("Search")}
+        >
           <Feather name="search" size={20} color={Colors.textPlaceholder} />
           <Text style={styles.placeholder}>Search products</Text>
         </TouchableOpacity>
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     gap: 12,
     backgroundColor: Colors.background,
-    borderColor: Colors.primary,
+    borderColor: Colors.secondary300,
     borderWidth: 1,
     borderRadius: 30,
     elevation: 2,

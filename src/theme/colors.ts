@@ -12,7 +12,7 @@ export const Colors = {
   primary700: "#5c6247",
 
   secondary50: "#fff2f3",
-  secondary100: "#ffd6d9",
+  secondary100: "#ffe8e9",
   secondary200: "#ffb3b8",
   secondary300: "#ff9097",
   secondary400: "#f58086",
@@ -43,7 +43,7 @@ export const Colors = {
   // Border
   border: "#e5e5e5",
   borderLight: "#F0F0F0",
-  borderFocus: "#818762",
+  borderFocus: "#ffb3b8",
 
   // State colors
   textSuccess: "#4CAF50",

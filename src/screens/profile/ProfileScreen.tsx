@@ -6,13 +6,19 @@ import { useAppNavigation } from "../../navigation/useAppNavigation";
 export default function ProfileScreen() {
   const navigation = useAppNavigation();
 
+  const username = "ikikasumi";   //fake
+
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Welcome, Huyen !</Text>
-      </View>
-
       <View style={styles.infoContainer}>
+        {/** Header*/}
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>{username}</Text>
+          <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>
+            <Ionicons name="cart-outline" size={24} />
+          </TouchableOpacity>
+        </View>
+
         {/** My Orders*/}
         <View style={styles.section}>
           <View style={styles.row}>
@@ -121,31 +127,31 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.secondary500,
-  },
-
-  headerContainer: {
-    paddingTop: 64,
-    paddingBottom: 36,
-    paddingHorizontal: 20,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: 600,
-    color: Colors.textInverse,
+    backgroundColor: Colors.bgSecondary,
   },
 
   infoContainer: {
-    flex: 1,
-    backgroundColor: Colors.bgSecondary,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    overflow: "hidden",
     gap: 14,
+    paddingBottom: 24,
+  },
+
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 14,
+    paddingBottom: 14,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.card,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 700,
+    color: Colors.text,
   },
 
   section: {
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.card,
     padding: 18,
     gap: 30,
   },
@@ -179,7 +185,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   buttonIcon: {
-    color: Colors.primary500
+    color: Colors.textSecondary
   },
   buttonText: {
     fontSize: 10,
@@ -198,6 +204,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 18,
     gap: 10,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.card,
   },
 });

@@ -87,7 +87,7 @@ export default function BrandProductsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.bgSecondary,
   },
 
   filterContainer: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 
   productsContainer: {
     paddingTop: 16,
-    paddingBottom: 70,
+    paddingBottom: 20,
   },
   productsRow: {
     paddingHorizontal: PADDING_HORIZONTAL,

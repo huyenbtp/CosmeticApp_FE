@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppNavigator, { RootStackParamList } from "./src/navigation/AppNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 import { ActivityIndicator, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState<
@@ -42,8 +43,10 @@ export default function App() {
   }
 
   return (
+    <SafeAreaProvider>
       <NavigationContainer>
         <AppNavigator initialRoute={initialRoute} />
       </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

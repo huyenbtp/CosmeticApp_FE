@@ -12,6 +12,7 @@ import CategoryProductsScreen from "../screens/explore/CategoryProducts";
 import ProfileInformationScreen from "../screens/profile/ProfileInformationScreen";
 import AddressListScreen from "../screens/profile/AddressListScreen";
 import MyOrdersScreen from "../screens/order/MyOrders/MyOrdersScreen";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type RootStackParamList = {
   AddressList: undefined
@@ -38,9 +39,17 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator({ initialRoute = "Login" }: { initialRoute: keyof RootStackParamList }) {
 
+  const insets = useSafeAreaInsets();
+
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, }}
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          marginTop: insets.top,
+          marginBottom: insets.bottom
+        }
+      }}
       initialRouteName={initialRoute}
     >
       <Stack.Screen name="Main" component={MainBottomTabs} />

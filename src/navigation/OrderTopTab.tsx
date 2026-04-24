@@ -36,8 +36,6 @@ export default function OrderTopTabs({ initialRoute }: { initialRoute: string })
         },
         sceneStyle: {
           backgroundColor: Colors.bgSecondary,
-          padding: 16,
-          gap: 12,
         },
         tabBarScrollEnabled: true
       }}

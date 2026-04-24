@@ -6,7 +6,6 @@ import ProfileScreen from "../screens/profile/ProfileScreen";
 import ExploreScreen from "../screens/explore/ExploreScreen";
 
 import { Ionicons, Octicons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../theme/colors";
 
 export type MainBottomTabParamList = {
@@ -19,7 +18,6 @@ export type MainBottomTabParamList = {
 const Tab = createBottomTabNavigator<MainBottomTabParamList>();
 
 export default function MainBottomTabs() {
-  const insets = useSafeAreaInsets();
 
   return (
     <Tab.Navigator
@@ -29,13 +27,12 @@ export default function MainBottomTabs() {
         tabBarShowLabel: false,
         tabBarStyle: {
           paddingTop: 14,
-          paddingBottom: insets.bottom,
           backgroundColor: "#fff",
           elevation: 6,
           shadowColor: "#000",
           shadowOpacity: 0.1,
           shadowRadius: 10,
-          height: 65 + insets.bottom,
+          height: 65,
         },
       }}
     >

@@ -10,6 +10,10 @@ export default function OrderList({ data }: { data: IOrder[] }) {
       data={data}
       keyExtractor={(item) => item._id}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        padding: 16,
+        gap: 12,
+      }}
       renderItem={({ item }) => (
         <OrderCard item={item} />
       )}

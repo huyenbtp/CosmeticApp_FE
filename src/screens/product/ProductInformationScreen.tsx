@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions } from "react-native";
 import { Colors } from "../../theme/colors";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import StarRating from "../../components/common/StarRating";
@@ -54,7 +53,6 @@ const mockProduct = {
 };
 
 export default function ProductInformationScreen() {
-  const insets = useSafeAreaInsets();
   const navigation = useAppNavigation();
 
   const data = mockProduct;
@@ -254,7 +252,7 @@ export default function ProductInformationScreen() {
         }
       />
 
-      <View style={[styles.footerContainer, { marginBottom: insets.bottom }]}>
+      <View style={styles.footerContainer}>
         <TouchableOpacity
           style={styles.addToCartButton}
           onPress={() => navigation.goBack()}
@@ -277,7 +275,7 @@ export default function ProductInformationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.bgSecondary,
   },
 
   sectionContainer: {

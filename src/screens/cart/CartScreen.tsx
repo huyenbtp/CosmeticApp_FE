@@ -5,7 +5,6 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { useState } from "react";
 import { ICartItem } from "../../types/cartItem";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "../../components/common/Header";
 
 const mockCartItem = [
@@ -27,7 +26,6 @@ const mockCartItem = [
 
 export default function CartScreen() {
   const navigation = useAppNavigation();
-  const insets = useSafeAreaInsets();
 
   const [data, setData] = useState<ICartItem[]>(mockCartItem);
   const [cartItemID, setCartItemId] = useState<string[]>([]);
@@ -143,7 +141,7 @@ export default function CartScreen() {
       />
 
       {/* Bottom */}
-      <View style={[styles.footerContainer, { marginBottom: insets.bottom }]}>
+      <View style={styles.footerContainer}>
         <View style={styles.row}>
           <View style={styles.row}>
             <Checkbox

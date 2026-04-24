@@ -20,11 +20,13 @@ export default function Header({
 
   return (
     <View style={styles.headerContainer}>
-      {hasGoBack &&
+      {(hasGoBack || title) &&
         <View style={{ flexDirection: "row", alignItems: "center", gap: 18 }}>
-          <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={24} />
-          </TouchableOpacity>
+          {hasGoBack &&
+            <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={24} />
+            </TouchableOpacity>
+          }
 
           {title &&
             <Text style={styles.title}>{title}</Text>
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 14,
-    paddingTop: 45,
+    paddingTop: 12,
     paddingBottom: 12,
     backgroundColor: Colors.background,
     gap: 10,

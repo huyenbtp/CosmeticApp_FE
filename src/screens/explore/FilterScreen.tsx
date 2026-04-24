@@ -206,7 +206,7 @@ export default function FilterScreen({ navigation, route }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.bgSecondary,
   },
 
   section: {
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 'auto',
     paddingTop: 14,
-    paddingBottom: 70,
+    paddingBottom: 16,
     paddingHorizontal: 20,
     gap: 16,
     backgroundColor: Colors.background,

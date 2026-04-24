@@ -4,7 +4,6 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import Header from "../../components/common/Header";
 import { IUserAddress } from "../../types/userAddress";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const mockAddresses: IUserAddress[] = [
   {
@@ -33,7 +32,6 @@ const mockAddresses: IUserAddress[] = [
 
 export default function AddressListScreen() {
   const navigation = useAppNavigation();
-  const insets = useSafeAreaInsets();
 
   const data = mockAddresses;
 
@@ -74,7 +72,7 @@ export default function AddressListScreen() {
       />
 
       {/* Bottom */}
-      <View style={[styles.footerContainer, { marginBottom: insets.bottom }]}>
+      <View style={styles.footerContainer}>
         <TouchableOpacity style={styles.addButton}>
           <Text style={styles.addButtonText}>ADD A SHIPPING ADDRESS</Text>
         </TouchableOpacity>
@@ -86,7 +84,7 @@ export default function AddressListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.bgSecondary,
   },
 
   item: {

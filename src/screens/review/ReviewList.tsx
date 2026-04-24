@@ -21,6 +21,48 @@ const mockReviews: IReview[] = [
     comment: "high quality",
     createdAt: "2025-02-08T09:30:00",
   },
+  {
+    _id: "3",
+    username: "Sarah",
+    rating: 5,
+    comment: "love it",
+    createdAt: "2026-03-15T09:30:00",
+  },
+  {
+    _id: "4",
+    username: "Selena Eva",
+    rating: 5,
+    comment: "high quality",
+    createdAt: "2025-02-08T09:30:00",
+  },
+  {
+    _id: "11",
+    username: "Sarah",
+    rating: 5,
+    comment: "love it",
+    createdAt: "2026-03-15T09:30:00",
+  },
+  {
+    _id: "12",
+    username: "Selena Eva",
+    rating: 5,
+    comment: "high quality",
+    createdAt: "2025-02-08T09:30:00",
+  },
+  {
+    _id: "31",
+    username: "Sarah",
+    rating: 5,
+    comment: "love it",
+    createdAt: "2026-03-15T09:30:00",
+  },
+  {
+    _id: "14",
+    username: "Selena Eva",
+    rating: 5,
+    comment: "high quality",
+    createdAt: "2025-02-08T09:30:00",
+  },
 ]
 
 export default function ReviewListScreen() {
@@ -52,7 +94,7 @@ export default function ReviewListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.bgSecondary,
   },
   headerContainer: {
     flexDirection: "row",
@@ -71,7 +113,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     paddingHorizontal: 14,
     paddingTop: 18,
-    paddingBottom: 80,
+    paddingBottom: 24,
     gap: 24,
   },
 

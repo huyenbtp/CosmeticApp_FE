@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, } from "react-native";
 import { Colors } from "../../theme/colors";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 
 
@@ -10,8 +9,6 @@ export default function SearchBar({
 }: {
   onSearch: (q: string) => void
 }) {
-
-  const navigation = useAppNavigation();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -26,7 +23,6 @@ export default function SearchBar({
       <Feather name="search" size={20} color={Colors.textPlaceholder} />
 
       <TextInput
-        id="input"
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Search products"

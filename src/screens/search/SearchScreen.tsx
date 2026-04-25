@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
-import { useEffect, useState } from "react";
 import SearchBar from "../../components/common/SearchBar";
 
 export default function SearchScreen() {
@@ -23,7 +22,10 @@ export default function SearchScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.headerContainer}>
@@ -46,7 +48,13 @@ export default function SearchScreen() {
 
             {history.map((item) => (
               <View key={item._id} style={styles.item}>
-                <TouchableOpacity onPress={() => navigation.navigate("SearchResults", { keyword: item.keyword })}>
+                <TouchableOpacity
+                  style={{ flex: 1 }}
+                  onPress={() => navigation.navigate(
+                    "SearchResults",
+                    { keyword: item.keyword }
+                  )}
+                >
                   <Text style={styles.itemText}>
                     {item.keyword}
                   </Text>

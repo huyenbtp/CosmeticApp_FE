@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EditProfileScreen from "../screens/profile/EditProfile";
 import SearchScreen from "../screens/search/SearchScreen";
 import SearchResultScreen from "../screens/search/SearchResultScreen";
+import OrderInformationScreen from "../screens/order/OrderInformation/OrderInformation";
 
 export type RootStackParamList = {
   AddressList: undefined
@@ -29,7 +30,7 @@ export type RootStackParamList = {
   Main: undefined
   MyOrders: { initialRoute: string }
   Onboarding: undefined
-  OrderInformation: undefined
+  OrderInformation: { order_id: string }
   ProductInformation: { product_id: string }
   ProfileInformation: undefined
   ReviewList: { product_id: string }
@@ -67,6 +68,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      <Stack.Screen name="OrderInformation" component={OrderInformationScreen} />
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />
       <Stack.Screen name="ProfileInformation" component={ProfileInformationScreen} />
       <Stack.Screen name="ReviewList" component={ReviewListScreen} />

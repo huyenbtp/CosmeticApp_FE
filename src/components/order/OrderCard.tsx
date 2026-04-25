@@ -10,7 +10,7 @@ export default function OrderCard({ item }: { item: IOrder }) {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => { }}
+      onPress={() => { navigation.navigate("OrderInformation", { order_id: item._id }) }}
     >
       <View style={styles.row}>
         <TouchableOpacity>

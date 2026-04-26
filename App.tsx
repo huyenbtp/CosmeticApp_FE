@@ -4,6 +4,7 @@ import AppNavigator, { RootStackParamList } from "./src/navigation/AppNavigator"
 import { NavigationContainer } from "@react-navigation/native";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { CartProvider } from "./src/providers/CartProvider";
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState<
@@ -44,9 +45,11 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <AppNavigator initialRoute={initialRoute} />
-      </NavigationContainer>
+      <CartProvider>
+        <NavigationContainer>
+          <AppNavigator initialRoute={initialRoute} />
+        </NavigationContainer>
+      </CartProvider>
     </SafeAreaProvider>
   );
 }

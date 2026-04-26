@@ -3,24 +3,25 @@ import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { IOrderItem } from "../../types/orderItem";
 
-export default function ItemCard({ item }: { item: IOrderItem }) {
+export default function ItemCard({ item, disabled = false }: { item: IOrderItem, disabled?: boolean }) {
   const navigation = useAppNavigation();
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate("ProductInformation", { product_id: item._id })}
+      onPress={() => navigation.navigate("ProductInformation", { product_id: item.product_id })}
+      disabled={disabled}
     >
-        <Image source={{ uri: item.product.image }} style={styles.imagePlaceholder} />
+      <Image source={{ uri: item.product.image }} style={styles.imagePlaceholder} />
 
-        <View style={styles.infoContainer}>
-          <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>
+      <View style={styles.infoContainer}>
+        <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>
 
-          <View style={styles.row}>
-            <Text style={styles.price}>{(item.unit_price).toLocaleString()}₫</Text>
-            <Text style={styles.qty}>Quantity: {item.quantity}</Text>
-          </View>
+        <View style={styles.row}>
+          <Text style={styles.price}>{(item.unit_price).toLocaleString()}₫</Text>
+          <Text style={styles.qty}>Quantity: {item.quantity}</Text>
         </View>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -29,11 +30,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     backgroundColor: Colors.card,
-    height: 87,
+    height: 96,
     gap: 12,
-    padding: 6,
+    paddingHorizontal: 6,
+    paddingBottom: 20,
     borderRadius: 6,
     overflow: "hidden",
+    borderBottomWidth: 1,
+    borderColor: Colors.divider,
   },
   infoContainer: {
     flex: 1,

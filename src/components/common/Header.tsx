@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
-
+import { useCart } from "../../providers/CartProvider";
 
 export default function Header({
   title = "",
@@ -15,7 +15,7 @@ export default function Header({
   hasGoBack?: boolean
   hasCart?: boolean
 }) {
-
+  const { totalItems } = useCart();
   const navigation = useAppNavigation();
 
   return (
@@ -48,6 +48,14 @@ export default function Header({
         {hasCart &&
           <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>
             <Ionicons name="cart-outline" size={24} />
+
+            {totalItems > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {totalItems}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
         }
       </View>
@@ -84,5 +92,21 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     color: Colors.textPlaceholder
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -8,
+    backgroundColor: Colors.bgError,
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    minWidth: 16,
+    alignItems: "center",
+  },
+
+  badgeText: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "600",
   },
 })

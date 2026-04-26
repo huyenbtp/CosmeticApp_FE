@@ -3,96 +3,123 @@ import Checkbox from 'expo-checkbox';
 import { Colors } from "../../theme/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ICartItem } from "../../types/cartItem";
 import Header from "../../components/common/Header";
+import { IOrderItem } from "../../types/orderItem";
+import { useCart } from "../../providers/CartProvider";
 
-const mockCartItem = [
+const mockCartItem: ICartItem[] = [
   {
     _id: "1",
-    name: "Tinh Chất Dưỡng Ẩm Torriden Dive-In Serum 50m",
-    price: 299000,
-    image: "https://picsum.photos/200/200?random=1",
+    product_id: "1",
+    product: {
+      _id: "3",
+      name: "Tinh Chất Dưỡng Ẩm Torriden Dive-In Serum 50ml",
+      price: 299000,
+      image: "https://picsum.photos/200/200?random=3",
+    },
     quantity: 1,
+    createdAt: "2024-04-04T05:00:00Z",
+    updatedAt: "2024-04-04T05:00:00Z",
   },
   {
     _id: "2",
-    name: "Kem Chống Nắng Cho Da Nhạy Cảm Skin1004 Madagascar Centella Air-Fit Suncream Plus Spf50+ Pa++++ 50Ml",
-    price: 250000,
-    image: "https://picsum.photos/200/200?random=2",
+    product_id: "2",
+    product: {
+      _id: "1",
+      name: "Kem Chống Nắng Cho Da Nhạy Cảm Skin1004 Madagascar Centella Air-Fit Suncream Plus Spf50+ Pa++++ 50Ml",
+      price: 250000,
+      image: "https://picsum.photos/200/200?random=2",
+    },
     quantity: 2,
+    createdAt: "2024-04-04T05:00:00Z",
+    updatedAt: "2024-04-04T05:00:00Z",
   },
 ];
 
 export default function CartScreen() {
   const navigation = useAppNavigation();
+  const {
+    cart,
+    setCartFromServer,
+    selectedItems,
+    setSelectedItems,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useCart();
 
-  const [data, setData] = useState<ICartItem[]>(mockCartItem);
-  const [cartItemID, setCartItemId] = useState<string[]>([]);
+  useEffect(() => {
+    const fetchCart = async () => {
+      const res = mockCartItem;
+      setCartFromServer(res); // 🔥 sync context
+    };
 
-  const isAllSelected = data.length === cartItemID.length;
+    fetchCart();
+  }, []);
+
+  const [selectedItemID, setSelectedItemId] = useState<string[]>([]);
+
+  const isAllSelected = cart.length === selectedItemID.length;
 
   const toggleSelect = (id: string, value: boolean) => {
-    if (!value) setCartItemId(prev => prev.filter(item => item !== id))
-    else setCartItemId(prev => [...prev, id])
+    if (!value) setSelectedItemId(prev => prev.filter(item => item !== id))
+    else setSelectedItemId(prev => [...prev, id])
   };
 
   const handleSelectAll = (value: boolean) => {
-    if (value) setCartItemId(data.map((item) => item._id));
-    else setCartItemId([])
+    if (value) setSelectedItemId(cart.map((item) => item._id));
+    else setSelectedItemId([])
   }
 
-  // 🔹 tăng giảm số lượng
-  const increaseQty = (id: string) => {
-    setData((prev) =>
-      prev.map((item) =>
-        item._id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
-  };
-  const decreaseQty = (id: string) => {
-    setData((prev) =>
-      prev.map((item) =>
-        item._id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
-  };
-
-  // 🔹 xóa sản phẩm
-  const removeItem = (id: string) => {
-
-  };
-
   // 🔹 tổng tiền
-  const total = data.reduce(
+  const total = cart.reduce(
     (sum, item) =>
-      cartItemID.includes(item._id) ? sum + item.price * item.quantity : sum,
+      selectedItemID.includes(item._id) ? sum + item.product.price * item.quantity : sum,
     0
   );
+
+  const handleApply = () => {
+    const selected = cart.filter((item) => selectedItemID.includes(item._id));
+
+    const orderItem: IOrderItem[] = selected.map((item) => ({
+      product_id: item.product._id,
+      product: {
+        _id: item.product_id,
+        name: item.product.name,
+        image: item.product.image || "",
+      },
+      unit_price: item.product.price,
+      quantity: item.quantity,
+    }))
+
+    setSelectedItems(orderItem); // 🔥 lưu vào context
+    navigation.navigate("Checkout", {})
+  }
 
   // 🔹 render item
   const renderItem = ({ item }: { item: ICartItem }) => (
     <View style={styles.item}>
       <View style={{ width: "auto" }}>
         <Checkbox
-          value={cartItemID.includes(item._id)}
+          value={selectedItemID.includes(item._id)}
           onValueChange={(value) => toggleSelect(item._id, value)}
           style={{ borderRadius: 5 }}
           color={Colors.primary500}
         />
       </View>
-      <View style={styles.infoContainer}>
-        <Image source={{ uri: item.image }} style={styles.imagePlaceholder} />
+      <TouchableOpacity
+        style={styles.infoContainer}
+        onPress={() => navigation.navigate("ProductInformation", { product_id: item.product_id })}
+      >
+        <Image source={{ uri: item.product.image }} style={styles.imagePlaceholder} />
 
         <View style={{ flex: 1, justifyContent: "space-between", }}>
-          <Text numberOfLines={2} style={styles.name}>{item.name}</Text>
+          <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>
 
           <View style={styles.row}>
-            <Text style={styles.price}>{(item.price).toLocaleString()}₫</Text>
+            <Text style={styles.price}>{(item.product.price).toLocaleString()}₫</Text>
 
             <View style={styles.row}>
               {/* Quantity */}
@@ -121,7 +148,7 @@ export default function CartScreen() {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 
@@ -130,7 +157,7 @@ export default function CartScreen() {
       <Header title="Cart" />
 
       <FlatList
-        data={data}
+        data={cart}
         keyExtractor={(item) => item._id}
         renderItem={renderItem}
         contentContainerStyle={{}}
@@ -159,11 +186,14 @@ export default function CartScreen() {
             </Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.checkoutBtn}>
+        <TouchableOpacity
+          style={styles.checkoutBtn}
+          onPress={() => handleApply()}
+        >
           <Text style={styles.checkoutText}>COMPLETE PAYMENT</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </View >
   );
 }
 

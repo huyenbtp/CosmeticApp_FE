@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, } from "react-native";
 import { Colors } from "../../theme/colors";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { Feather, Fontisto, Ionicons } from "@expo/vector-icons";
 import Header from "../../components/common/Header";
 import { IUserAddress } from "../../types/userAddress";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
 
 const mockAddresses: IUserAddress[] = [
   {
@@ -30,9 +30,9 @@ const mockAddresses: IUserAddress[] = [
   },
 ];
 
-export default function AddressListScreen() {
-  const navigation = useAppNavigation();
-
+export default function AddressListScreen({ route }: any) {
+  const navigation = useAppNavigation()
+  const { withCheckbox, selectedAddressId } = route.params;
   const data = mockAddresses;
 
   return (
@@ -44,23 +44,36 @@ export default function AddressListScreen() {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.item} key={item._id}>
-            <View style={styles.row}>
-              <Text style={styles.name}>{item.receiver_name} | {item.phone}</Text>
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Edit</Text>
+            {withCheckbox && (
+              <TouchableOpacity onPress={() => {
+                navigation.popTo("Checkout", { address: item })
+              }}>
+                {selectedAddressId === item._id
+                  ? <Fontisto name="radio-btn-active" size={20} color={Colors.secondary} />
+                  : <Fontisto name="radio-btn-passive" size={20} color={Colors.textPlaceholder} />
+                }
               </TouchableOpacity>
-            </View>
+            )}
 
-            <Text style={styles.address}>
-              {item.address_line + ", " + item.ward + ", " + item.district + ", " + item.city}
-            </Text>
-            {item.is_default &&
+            <View style={{ gap: 12, flex: 1 }}>
               <View style={styles.row}>
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Default</Text>
-                </View>
+                <Text style={styles.name}>{item.receiver_name} | {item.phone}</Text>
+                <TouchableOpacity style={styles.button}>
+                  <Text style={styles.buttonText}>Edit</Text>
+                </TouchableOpacity>
               </View>
-            }
+
+              <Text style={styles.address}>
+                {item.address_line + ", " + item.ward + ", " + item.district + ", " + item.city}
+              </Text>
+              {item.is_default &&
+                <View style={styles.row}>
+                  <View style={styles.badge}>
+                    <Text style={styles.badgeText}>Default</Text>
+                  </View>
+                </View>
+              }
+            </View>
           </View>
         )}
         contentContainerStyle={{}}
@@ -88,6 +101,7 @@ const styles = StyleSheet.create({
   },
 
   item: {
+    flexDirection: "row",
     backgroundColor: Colors.card,
     padding: 18,
     gap: 12,

@@ -11,39 +11,30 @@ const mockData: IOrderDetail = {
   order_code: "ORD-2025-000001",
   items: [
     {
-      _id: "1",
-      order_id: "1",
       product_id: "1",
       product: {
         _id: "1",
         name: "Kem Chống Nắng Cho Da Nhạy Cảm Skin1004 Madagascar Centella Air-Fit Suncream Plus Spf50+ Pa++++ 50Ml",
-        sku: "SUN-SKI-0001",
         image: "https://picsum.photos/200/200?random=1",
       },
       unit_price: 480000,
       quantity: 1,
     },
     {
-      _id: "2",
-      order_id: "1",
       product_id: "2",
       product: {
         _id: "2",
         name: "Sữa rửa mặt Innisfree Green Tea",
-        sku: "CLS-INN-0001",
         image: "https://picsum.photos/200/200?random=2",
       },
       unit_price: 210000,
       quantity: 1,
     },
     {
-      _id: "3",
-      order_id: "1",
       product_id: "3",
       product: {
         _id: "3",
         name: "Tinh Chất Dưỡng Ẩm Torriden Dive-In Serum 50ml",
-        sku: "MAK-TOR-0003",
         image: "https://picsum.photos/200/200?random=3",
       },
       unit_price: 295000,
@@ -128,11 +119,11 @@ export default function OrderInformationScreen({ navigation, route }: any) {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Items List</Text>
 
-            {data.items.map(item => (
-              <View key={item._id} style={styles.divider}>
-                <ItemCard item={item} />
-              </View>
-            ))}
+            <View style={{ gap: 20 }}>
+              {data.items.map(item => (
+                <ItemCard key={item.product_id} item={item} />
+              ))}
+            </View>
 
             <View style={{ gap: 14 }}>
               <View style={styles.rowBetween}>
@@ -207,7 +198,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
                 <TouchableOpacity
                   style={[styles.button, { borderColor: Colors.primary, borderWidth: 1, }]}
                   onPress={() => {
-                    
+
                   }}
                 >
                   <Text style={[styles.buttonText, {}]}>
@@ -217,7 +208,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
                 <TouchableOpacity
                   style={[styles.button, { backgroundColor: Colors.primary, }]}
                   onPress={() => {
-                    
+
                   }}
                 >
                   <Text style={[styles.buttonText, { color: Colors.textInverse }]}>Review</Text>

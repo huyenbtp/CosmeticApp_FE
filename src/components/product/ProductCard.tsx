@@ -10,7 +10,7 @@ export default function ProductCard({ item }: { item: IProduct }) {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate("ProductInformation", { product_id: item._id })}
+      onPress={() => navigation.push("ProductInformation", { product_id: item._id })}
     >
       <Image source={{ uri: item.image }} style={styles.image} />
 

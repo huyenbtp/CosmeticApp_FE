@@ -2,9 +2,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "rea
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { useCart } from "../../providers/CartProvider";
 
 export default function ProfileScreen() {
   const navigation = useAppNavigation();
+  const { totalItems } = useCart();
 
   const username = "ikikasumi";   //fake
 
@@ -15,6 +17,13 @@ export default function ProfileScreen() {
         <Text style={styles.headerTitle}>{username}</Text>
         <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>
           <Ionicons name="cart-outline" size={24} />
+          {totalItems > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>
+                {totalItems}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -63,7 +72,7 @@ export default function ProfileScreen() {
                 <FontAwesome6 name="user-circle" size={30} style={styles.buttonIcon} />
                 <Text style={styles.buttonText}>Personal Information</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AddressList")}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AddressList", {})}>
                 <FontAwesome6 name="map-location-dot" size={30} style={styles.buttonIcon} />
                 <Text style={styles.buttonText}>Shipping Address</Text>
               </TouchableOpacity>
@@ -151,6 +160,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 700,
     color: Colors.text,
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -8,
+    backgroundColor: Colors.bgError,
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    minWidth: 16,
+    alignItems: "center",
+  },
+
+  badgeText: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "600",
   },
 
   section: {

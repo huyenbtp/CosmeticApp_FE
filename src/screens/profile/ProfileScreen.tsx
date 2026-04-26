@@ -3,12 +3,18 @@ import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { useCart } from "../../providers/CartProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfileScreen() {
   const navigation = useAppNavigation();
   const { totalItems } = useCart();
 
   const username = "ikikasumi";   //fake
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("authToken"); //giả lập
+    navigation.replace("Login");
+  };
 
   return (
     <View style={styles.container}>
@@ -125,7 +131,7 @@ export default function ProfileScreen() {
           </View>
 
           {/** Log out*/}
-          <TouchableOpacity style={styles.logoutButton}>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Feather name="log-out" size={20} />
             <Text>Log out</Text>
           </TouchableOpacity>

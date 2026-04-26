@@ -17,6 +17,7 @@ import EditProfileScreen from "../screens/profile/EditProfile";
 import SearchScreen from "../screens/search/SearchScreen";
 import SearchResultScreen from "../screens/search/SearchResultScreen";
 import OrderInformationScreen from "../screens/order/OrderInformation/OrderInformation";
+import ShippingInformationScreen from "../screens/order/OrderInformation/ShippingInformationScreen";
 
 export type RootStackParamList = {
   AddressList: undefined
@@ -36,6 +37,7 @@ export type RootStackParamList = {
   ReviewList: { product_id: string }
   Search: undefined
   SearchResults: { keyword: string }
+  ShippingInformation: {order_id: string}
   Wishlist: undefined
   ViewHistory: undefined
 }
@@ -69,6 +71,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="OrderInformation" component={OrderInformationScreen} />
+      <Stack.Screen name="ShippingInformation" component={ShippingInformationScreen} />
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />
       <Stack.Screen name="ProfileInformation" component={ProfileInformationScreen} />
       <Stack.Screen name="ReviewList" component={ReviewListScreen} />

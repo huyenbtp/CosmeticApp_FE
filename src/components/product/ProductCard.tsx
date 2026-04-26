@@ -32,7 +32,7 @@ export default function ProductCard({ item }: { item: IProduct }) {
             gap: 6
           }}>
             <StarRating rating={item.rating} />
-            <Text style={{ color: Colors.textWarning, fontWeight: 500, fontSize: 12 }}>
+            <Text style={{ color: Colors.rating, fontWeight: 500, fontSize: 12 }}>
               {item.rating.toFixed(1)}
             </Text>
           </View>

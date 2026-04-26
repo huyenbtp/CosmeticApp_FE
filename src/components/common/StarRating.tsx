@@ -25,7 +25,7 @@ export default function StarRating({
             key={i}
             name={iconName}
             size={size}
-            color={Colors.textWarning}
+            color={Colors.rating}
             style={{ marginRight: 1 }}
           />
         );

@@ -222,7 +222,7 @@ export default function ProductInformationScreen() {
                 gap: 6
               }}>
                 <StarRating rating={data.rating} />
-                <Text style={{ color: Colors.textWarning, fontWeight: 500, fontSize: 12 }}>
+                <Text style={{ color: Colors.rating, fontWeight: 500, fontSize: 12 }}>
                   {data.rating.toFixed(1)}
                 </Text>
                 <Text style={{ color: Colors.textSecondary, fontSize: 10 }}>

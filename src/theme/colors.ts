@@ -46,13 +46,25 @@ export const Colors = {
   borderFocus: "#ffb3b8",
 
   // State colors
-  textSuccess: "#4CAF50",
-  textError: "#F44336",
-  textWarning: "#FFAB07",
+  textSuccess: "#ffffff",
+  textError: "#ffffff",
+  textWarning: "#1a1a1a",
+  textInfo: "#ffffff",
 
-  bgSuccess: "#E8F5E9",
-  bgError: "#FFEBEE",
-  bgWarning: "#FFF8E1",
+  bgSuccess: "#4CAF50",
+  bgError: "#F44336",
+  bgWarning: "#FFAB07",
+  bgInfo: "#0288d1",
+
+  textSuccess1: "#026630",
+  textError1: "#9f0712",
+  textWarning1: "#894b00",
+  textInfo1: "#193cb8",
+
+  bgSuccess1: "#dcfce7",
+  bgError1: "#ffe2e2",
+  bgWarning1: "#fef9c2",
+  bgInfo1: "#dbeafe",
 
   // Extra (rất hữu ích)
   divider: "#EEEEEE",

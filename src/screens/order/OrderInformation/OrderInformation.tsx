@@ -79,17 +79,18 @@ const getOrderStatus = (status: string) => {
     case "confirmed":
       return "The order has been confirmed"
     case "shipping":
-      return "The order is being delivered."
+      return "The order is being shipped"
     case "delivered":
-      return "The order has been delivered."
+      return "The order has been delivered"
     case "canceled":
-      return "The order has been cancelled."
+      return "The order has been cancelled"
     case "returned":
-      return "The order has been returned."
+      return "The order has been returned"
   }
 }
-export default function OrderInformationScreen() {
-  const navigation = useAppNavigation();
+
+export default function OrderInformationScreen({ navigation, route }: any) {
+  const { order_id } = route.params;
 
   const data = mockData;
 
@@ -98,18 +99,25 @@ export default function OrderInformationScreen() {
       <View>
         <Header title="Order Information" />
 
-        <View style={styles.statusContainer}>
+        <View style={[styles.statusContainer, styles.row]}>
           <Text style={styles.text600}>{getOrderStatus(data.order_status)}</Text>
         </View>
+
         <View style={styles.section}>
-          <TouchableOpacity style={[styles.rowBetween, styles.divider]} onPress={() => navigation.navigate("EditProfile")}>
+          <TouchableOpacity
+            style={[styles.rowBetween, styles.divider]}
+            onPress={() => navigation.navigate("ShippingInformation", { order_id: order_id })}
+          >
             <Text style={styles.text600}>Shipping Information</Text>
             <Feather name="chevron-right" size={20} style={styles.buttonText} />
           </TouchableOpacity>
 
-          <Text style={styles.sectionTitle}>Shipping Address</Text>
+          <View style={styles.row}>
+            <Feather name="map-pin" size={16} />
+            <Text style={styles.sectionTitle}>Shipping Address</Text>
+          </View>
 
-          <View style={{ gap: 6 }}>
+          <View style={{ gap: 6, paddingLeft: 16, }}>
             <Text style={[styles.text500]}>{data.receiver_name} - {data.phone}</Text>
             <Text style={styles.text400}>
               {data.address_line}, {data.ward}, {data.district}, {data.city}

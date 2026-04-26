@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import RangeSlider from "rn-range-slider";
 import { useState } from "react";
 import { Colors } from "../../theme/colors";
@@ -95,84 +95,86 @@ export default function FilterScreen({ navigation, route }: any) {
     <View style={styles.container}>
       <Header title="Filter" />
 
-      {/** price range */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Price Range
-        </Text>
-
-        <RangeSlider
-          min={0}
-          max={2000000}
-          step={50000}
-          low={Math.min(min, max)}
-          high={Math.max(min, max)}
-          renderThumb={Thumb}
-          renderRail={Rail}
-          renderRailSelected={RailSelected}
-          onValueChanged={(l, h) => {
-            setMin(l);
-            setMax(h);
-          }}
-        />
-
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-          <Text style={{ fontSize: 12 }}>
-            {min.toLocaleString()}₫
+      <ScrollView>
+        {/** price range */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Price Range
           </Text>
-          <Text style={{ fontWeight: 600, fontSize: 12 }}>
-            {max.toLocaleString()}₫
+
+          <RangeSlider
+            min={0}
+            max={2000000}
+            step={50000}
+            low={Math.min(min, max)}
+            high={Math.max(min, max)}
+            renderThumb={Thumb}
+            renderRail={Rail}
+            renderRailSelected={RailSelected}
+            onValueChanged={(l, h) => {
+              setMin(l);
+              setMax(h);
+            }}
+          />
+
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            <Text style={{ fontSize: 12 }}>
+              {min.toLocaleString()}₫
+            </Text>
+            <Text style={{ fontWeight: 600, fontSize: 12 }}>
+              {max.toLocaleString()}₫
+            </Text>
+          </View>
+        </View>
+
+        {/** skin type */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Skin Type
           </Text>
+
+          <View style={styles.itemContainer}>
+            {mockSkinTypes.map(item => (
+              <TouchableOpacity
+                key={item._id}
+                style={[styles.item, skinTypes.includes(item) && styles.selectedItem]}
+                onPress={() => {
+                  if (skinTypes.includes(item)) setSkinTypes(skinTypes.filter(item => item._id !== item._id));
+                  else setSkinTypes((prev) => [...prev, item])
+                }}
+              >
+                <Text style={[styles.itemText, skinTypes.includes(item) && styles.selectedItemText]}>{item.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
 
-      {/** skin type */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Skin Type
-        </Text>
+        {/** tag */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            Tag
+          </Text>
 
-        <View style={styles.itemContainer}>
-          {mockSkinTypes.map(item => (
-            <TouchableOpacity
-              key={item._id}
-              style={[styles.item, skinTypes.includes(item) && styles.selectedItem]}
-              onPress={() => {
-                if (skinTypes.includes(item)) setSkinTypes(skinTypes.filter(item => item._id !== item._id));
-                else setSkinTypes((prev) => [...prev, item])
-              }}
-            >
-              <Text style={[styles.itemText, skinTypes.includes(item) && styles.selectedItemText]}>{item.name}</Text>
-            </TouchableOpacity>
-          ))}
+          <View style={styles.itemContainer}>
+            {mockTags.map(item => (
+              <TouchableOpacity
+                key={item._id}
+                style={[styles.item, tags.includes(item) && styles.selectedItem]}
+                onPress={() => {
+                  if (tags.includes(item)) setTags(tags.filter(item => item._id !== item._id));
+                  else setTags((prev) => [...prev, item])
+                }}
+              >
+                <Text style={[styles.itemText, tags.includes(item) && styles.selectedItemText]}>{item.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
-
-      {/** tag */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Tag
-        </Text>
-
-        <View style={styles.itemContainer}>
-          {mockTags.map(item => (
-            <TouchableOpacity
-              key={item._id}
-              style={[styles.item, tags.includes(item) && styles.selectedItem]}
-              onPress={() => {
-                if (tags.includes(item)) setTags(tags.filter(item => item._id !== item._id));
-                else setTags((prev) => [...prev, item])
-              }}
-            >
-              <Text style={[styles.itemText, tags.includes(item) && styles.selectedItemText]}>{item.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+      </ScrollView>
 
       <View style={styles.footerContainer}>
         <TouchableOpacity

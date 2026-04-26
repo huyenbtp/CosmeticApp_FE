@@ -82,7 +82,7 @@ const getOrderStatus = (status: string) => {
       return "The order is being shipped"
     case "delivered":
       return "The order has been delivered"
-    case "canceled":
+    case "cancelled":
       return "The order has been cancelled"
     case "returned":
       return "The order has been returned"
@@ -95,98 +95,138 @@ export default function OrderInformationScreen({ navigation, route }: any) {
   const data = mockData;
 
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <Header title="Order Information" />
-
-        <View style={[styles.statusContainer, styles.row]}>
-          <Text style={styles.text600}>{getOrderStatus(data.order_status)}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <TouchableOpacity
-            style={[styles.rowBetween, styles.divider]}
-            onPress={() => navigation.navigate("ShippingInformation", { order_id: order_id })}
-          >
-            <Text style={styles.text600}>Shipping Information</Text>
-            <Feather name="chevron-right" size={20} style={styles.buttonText} />
-          </TouchableOpacity>
-
-          <View style={styles.row}>
-            <Feather name="map-pin" size={16} />
-            <Text style={styles.sectionTitle}>Shipping Address</Text>
+    <View style={styles.container}>
+      <Header title="Order Information" />
+      <ScrollView>
+        <View>
+          <View style={[styles.statusContainer, styles.row]}>
+            <Text style={styles.text600}>{getOrderStatus(data.order_status)}</Text>
           </View>
 
-          <View style={{ gap: 6, paddingLeft: 16, }}>
-            <Text style={[styles.text500]}>{data.receiver_name} - {data.phone}</Text>
-            <Text style={styles.text400}>
-              {data.address_line}, {data.ward}, {data.district}, {data.city}
-            </Text>
-          </View>
-        </View>
+          <View style={styles.section}>
+            <TouchableOpacity
+              style={[styles.rowBetween, styles.divider]}
+              onPress={() => navigation.navigate("ShippingInformation", { order_id: order_id })}
+            >
+              <Text style={styles.text600}>Shipping Information</Text>
+              <Feather name="chevron-right" size={20} color={Colors.textLight} />
+            </TouchableOpacity>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Items List</Text>
-
-          {data.items.map(item => (
-            <View key={item._id} style={styles.divider}>
-              <ItemCard item={item} />
+            <View style={styles.row}>
+              <Feather name="map-pin" size={16} />
+              <Text style={styles.sectionTitle}>Shipping Address</Text>
             </View>
-          ))}
 
-          <View style={{ gap: 14 }}>
-            <View style={styles.rowBetween}>
+            <View style={{ gap: 6, paddingLeft: 16, }}>
+              <Text style={[styles.text500]}>{data.receiver_name} - {data.phone}</Text>
               <Text style={styles.text400}>
-                Subtotal ({data.total_items} item)
+                {data.address_line}, {data.ward}, {data.district}, {data.city}
               </Text>
-              <Text style={styles.text400}>
-                {data.total_estimated.toLocaleString()}₫
-              </Text>
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Items List</Text>
+
+            {data.items.map(item => (
+              <View key={item._id} style={styles.divider}>
+                <ItemCard item={item} />
+              </View>
+            ))}
+
+            <View style={{ gap: 14 }}>
+              <View style={styles.rowBetween}>
+                <Text style={styles.text400}>
+                  Subtotal ({data.total_items} item)
+                </Text>
+                <Text style={styles.text400}>
+                  {data.total_estimated.toLocaleString()}₫
+                </Text>
+              </View>
+
+              <View style={styles.rowBetween}>
+                <Text style={styles.text400}>
+                  Discount
+                </Text>
+                <Text style={[styles.text400, { color: Colors.textError }]}>
+                  -{data.discount_amount.toLocaleString()}₫
+                </Text>
+              </View>
+
+              <View style={styles.rowBetween}>
+                <Text style={styles.text500}>
+                  Total
+                </Text>
+                <Text style={styles.text500}>
+                  {data.total_estimated.toLocaleString()}₫
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <View style={styles.rowBetween}>
+              <Text style={styles.sectionTitle}>Order Code</Text>
+              <Text>{data.order_code}</Text>
             </View>
 
             <View style={styles.rowBetween}>
-              <Text style={styles.text400}>
-                Discount
-              </Text>
-              <Text style={[styles.text400, { color: Colors.textError }]}>
-                -{data.discount_amount.toLocaleString()}₫
-              </Text>
+              <Text style={styles.text400}>Payment method</Text>
+              <Text style={styles.text400}>{data.payment_method}</Text>
             </View>
 
             <View style={styles.rowBetween}>
-              <Text style={styles.text500}>
-                Total
-              </Text>
-              <Text style={styles.text500}>
-                {data.total_estimated.toLocaleString()}₫
-              </Text>
+              <Text style={styles.text400}>Order time</Text>
+              <Text style={styles.text400}>{new Date(data.createdAt).toLocaleString()}</Text>
+            </View>
+
+            <View style={styles.rowBetween}>
+              <Text style={styles.text400}>Completion time</Text>
+              <Text style={styles.text400}>{new Date(data.reveive_time).toLocaleString()}</Text>
             </View>
           </View>
         </View>
+      </ScrollView>
 
-        <View style={styles.section}>
-          <View style={styles.rowBetween}>
-            <Text style={styles.sectionTitle}>Order Code</Text>
-            <Text>{data.order_code}</Text>
-          </View>
+      {(data.order_status !== "cancelled" && data.order_status !== "returned") && (
+        <View style={styles.footerContainer}>
+          {(data.order_status === "pending" || data.order_status === "confirmed" || data.order_status === "shipping")
+            ? (
+              <>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: Colors.bgError }]}
+                  onPress={() => {
 
-          <View style={styles.rowBetween}>
-            <Text style={styles.text400}>Payment method</Text>
-            <Text style={styles.text400}>{data.payment_method}</Text>
-          </View>
-
-          <View style={styles.rowBetween}>
-            <Text style={styles.text400}>Order time</Text>
-            <Text style={styles.text400}>{new Date(data.createdAt).toLocaleString()}</Text>
-          </View>
-
-          <View style={styles.rowBetween}>
-            <Text style={styles.text400}>Completion time</Text>
-            <Text style={styles.text400}>{new Date(data.reveive_time).toLocaleString()}</Text>
-          </View>
+                  }}
+                >
+                  <Text style={[styles.buttonText, { color: Colors.textError }]}>Cancel</Text>
+                </TouchableOpacity>
+              </>
+            ) : data.order_status === "delivered" && (
+              <>
+                <TouchableOpacity
+                  style={[styles.button, { borderColor: Colors.primary, borderWidth: 1, }]}
+                  onPress={() => {
+                    
+                  }}
+                >
+                  <Text style={[styles.buttonText, {}]}>
+                    Request a Return/Refund
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: Colors.primary, }]}
+                  onPress={() => {
+                    
+                  }}
+                >
+                  <Text style={[styles.buttonText, { color: Colors.textInverse }]}>Review</Text>
+                </TouchableOpacity>
+              </>
+            )}
         </View>
-      </View>
-    </ScrollView>
+      )}
+    </View>
   );
 }
 
@@ -243,16 +283,26 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
 
-  button: {
+  footerContainer: {
+    flexDirection: 'row',
+    marginTop: 'auto',
+    paddingTop: 14,
+    paddingBottom: 16,
+    paddingHorizontal: 20,
+    gap: 10,
     backgroundColor: Colors.card,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  },
+  button: {
+    flex: 1,
+    height: 48,
+    backgroundColor: Colors.card,
+    justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-    gap: 16,
-    margin: 4,
+    paddingHorizontal: 12,
+    borderRadius: 8,
   },
   buttonText: {
-    color: Colors.primary500
+    fontSize: 14,
+    textAlign: "center",
   }
 });

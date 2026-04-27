@@ -4,6 +4,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -42,59 +44,64 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Title */}
-      <Text style={styles.title}>Welcome to Skintify</Text>
-      <Text style={styles.subtitle}>Login to continue</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <View style={styles.container}>
+        {/* Title */}
+        <Text style={styles.title}>Welcome to Skintify</Text>
+        <Text style={styles.subtitle}>Login to continue</Text>
 
-      {/* Username */}
-      <View style={styles.inputContainer}>
-        <Ionicons name="person-outline" size={18} />
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-          style={styles.input}
-        />
-      </View>
-
-      {/* Password */}
-      <View style={styles.inputContainer}>
-        <Ionicons name="lock-closed-outline" size={18} />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={secure}
-          style={styles.input}
-        />
-        <TouchableOpacity onPress={() => setSecure(!secure)}>
-          <Ionicons
-            name={secure ? "eye-off-outline" : "eye-outline"}
-            size={18}
+        {/* Username */}
+        <View style={styles.inputContainer}>
+          <Ionicons name="person-outline" size={18} />
+          <TextInput
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
           />
-        </TouchableOpacity>
-      </View>
+        </View>
 
-      {/* Login button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        <Text style={styles.buttonText}>
-          {loading ? "Loading..." : "Login"}
-        </Text>
-      </TouchableOpacity>
+        {/* Password */}
+        <View style={styles.inputContainer}>
+          <Ionicons name="lock-closed-outline" size={18} />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={secure}
+            style={styles.input}
+          />
+          <TouchableOpacity onPress={() => setSecure(!secure)}>
+            <Ionicons
+              name={secure ? "eye-off-outline" : "eye-outline"}
+              size={18}
+            />
+          </TouchableOpacity>
+        </View>
 
-      {/* Register */}
-      <View style={styles.row}>
-        <Text style={styles.text}>Don't have an account?</Text>
-        <TouchableOpacity >
-          <Text style={styles.link}> Register</Text>
+        {/* Login button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Loading..." : "Login"}
+          </Text>
         </TouchableOpacity>
+
+        {/* Register */}
+        <View style={styles.row}>
+          <Text style={styles.text}>Don't have an account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <Text style={styles.link}> Register</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { CartProvider } from "./src/providers/CartProvider";
+import { ToastProvider } from "./src/providers/ToastProvider";
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState<
@@ -45,11 +46,13 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <CartProvider>
-        <NavigationContainer>
-          <AppNavigator initialRoute={initialRoute} />
-        </NavigationContainer>
-      </CartProvider>
+      <ToastProvider>
+        <CartProvider>
+          <NavigationContainer>
+            <AppNavigator initialRoute={initialRoute} />
+          </NavigationContainer>
+        </CartProvider>
+      </ToastProvider>
     </SafeAreaProvider>
   );
 }

@@ -4,10 +4,13 @@ import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons,
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { useCart } from "../../providers/CartProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AlertDialog from "../../components/common/AlertDialog";
+import { useState } from "react";
 
 export default function ProfileScreen() {
   const navigation = useAppNavigation();
   const { totalItems } = useCart();
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const username = "ikikasumi";   //fake
 
@@ -131,12 +134,19 @@ export default function ProfileScreen() {
           </View>
 
           {/** Log out*/}
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <TouchableOpacity style={styles.logoutButton} onPress={() => setAlertVisible(true)}>
             <Feather name="log-out" size={20} />
             <Text>Log out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <AlertDialog
+        visible={alertVisible}
+        message="Are you sure you want to log out?"
+        onCancel={() => setAlertVisible(false)}
+        onConfirm={handleLogout}
+      />
     </View>
   );
 }

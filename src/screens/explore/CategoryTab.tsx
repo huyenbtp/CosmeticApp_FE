@@ -1,9 +1,10 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { ICategory, ICategoryUI } from "../../types/category";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { useCategories } from "../../services/category.service";
 
 const mockCategories: ICategory[] = [
   {
@@ -147,16 +148,25 @@ function transformToUI(data: ICategory[]): ICategoryUI[] {
 export default function CategoryScreen() {
   const navigation = useAppNavigation();
 
+  const { data, isLoading } = useCategories();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [categories, setCategories] = useState<ICategoryUI[]>([]);
 
   const selectedCategory = categories[selectedIndex];
 
   useEffect(() => {
-    const uiData = transformToUI(mockCategories);
-    setCategories(uiData);
-  }, []);
+    if (!data) return;
 
+    const uiData = transformToUI(data);
+    setCategories(uiData);
+
+  }, [data]);
+
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
   return (
     <View style={styles.container}>
       {/* LEFT MENU */}

@@ -35,8 +35,10 @@ export default function LoginScreen() {
         onSuccess: async (data) => {
           // lưu token
           await AsyncStorage.setItem("access_token", data.access_token);
+          await AsyncStorage.setItem("refresh_token", data.refresh_token);
           await AsyncStorage.setItem("user", JSON.stringify(data.user));
           console.log("access_token:" + data.access_token);
+          console.log("refresh_token:" + data.refresh_token);
           console.log("user:" + data.user);
           navigation.replace("Main");
         },

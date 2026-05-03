@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { CartProvider } from "./src/providers/CartProvider";
 import { ToastProvider } from "./src/providers/ToastProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { refreshAccessToken, validateToken } from "./src/utils/authUtils";
 
 const queryClient = new QueryClient();
 
@@ -23,11 +24,20 @@ export default function App() {
       return setInitialRoute("Onboarding");
     }
 
-    const accessToken = await AsyncStorage.getItem("authToken");
+    const accessToken = await AsyncStorage.getItem("access_token");
+    const refreshToken = await AsyncStorage.getItem("refresh_token");
 
     if (accessToken) {
-      const isValid = true; //giả lập
+      const isValid = await validateToken(accessToken);
       if (isValid) {
+        return setInitialRoute("Main");
+      }
+    }
+
+    if (refreshToken) {
+      const newTokens = await refreshAccessToken(refreshToken);
+      if (newTokens) {
+        await AsyncStorage.setItem("access_token", newTokens.access_token);
         return setInitialRoute("Main");
       }
     }

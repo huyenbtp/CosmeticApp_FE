@@ -1,7 +1,9 @@
-import { View, Text, SectionList, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, SectionList, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import { IBrand } from "../../types/brand";
 import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { useBrands } from "../../services/brand.service";
+import { useEffect, useState } from "react";
 
 const mockBrands: IBrand[] = [
   {
@@ -120,10 +122,23 @@ function groupByAlphabet(data: IBrand[]) {
 }
 
 export default function BrandScreen() {
-  const sections = groupByAlphabet(mockBrands);
+  const { data, isLoading } = useBrands();
+  const [sections, setSections] = useState<any>();
   const navigation = useAppNavigation();
 
-  return (
+  useEffect(() => {
+    if (!data) return;
+    const filterData = data.filter((item: any) => item.status === "active")
+    setSections(groupByAlphabet(filterData));
+
+  }, [data]);
+
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+  if (sections) return (
     <SectionList
       sections={sections}
       keyExtractor={(item) => item._id}

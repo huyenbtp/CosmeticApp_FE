@@ -15,7 +15,7 @@ export default function ProfileScreen() {
   const username = "ikikasumi";   //fake
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("authToken"); //giả lập
+    await AsyncStorage.removeItem("access_token"); //giả lập
     navigation.replace("Login");
   };
 

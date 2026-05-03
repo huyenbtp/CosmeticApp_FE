@@ -11,18 +11,42 @@ import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { useToast } from "../../providers/ToastProvider";
+import { useLogin } from "../../services/auth.service";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const navigation = useAppNavigation();
+  const { showMessage } = useToast();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secure, setSecure] = useState(true);
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
+
+  const { mutate, isPending } = useLogin();
 
   const handleLogin = async () => {
-    if (!username || !password) return;
+    if (!email || !password) return;
 
+    mutate(
+      { email, password },
+      {
+        onSuccess: async (data) => {
+          // lưu token
+          await AsyncStorage.setItem("access_token", data.access_token);
+          await AsyncStorage.setItem("user", JSON.stringify(data.user));
+          console.log("access_token:" + data.access_token);
+          console.log("user:" + data.user);
+          navigation.replace("Main");
+        },
+        onError: (error: any) => {
+          showMessage(error.response?.data.message, "error")
+        }
+      }
+    );
+
+    /*
     try {
       setLoading(true);
 
@@ -41,6 +65,7 @@ export default function LoginScreen() {
     } finally {
       setLoading(false);
     }
+      */
   };
 
   return (
@@ -53,13 +78,14 @@ export default function LoginScreen() {
         <Text style={styles.title}>Welcome to Skintify</Text>
         <Text style={styles.subtitle}>Login to continue</Text>
 
-        {/* Username */}
+        {/* Email */}
         <View style={styles.inputContainer}>
           <Ionicons name="person-outline" size={18} />
           <TextInput
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
+            keyboardType="email-address"
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
             style={styles.input}
           />
         </View>
@@ -86,10 +112,10 @@ export default function LoginScreen() {
         <TouchableOpacity
           style={styles.button}
           onPress={handleLogin}
-          disabled={loading}
+          disabled={isPending}
         >
           <Text style={styles.buttonText}>
-            {loading ? "Loading..." : "Login"}
+            {isPending ? "Loading..." : "Login"}
           </Text>
         </TouchableOpacity>
 

@@ -104,7 +104,7 @@ export const useToast = () => useContext(ToastContext);
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 80,
+    top: 50,
     alignSelf: "center",
     paddingHorizontal: 16,
     paddingVertical: 10,

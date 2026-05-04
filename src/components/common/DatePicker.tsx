@@ -1,15 +1,17 @@
-import { View, Text, TouchableOpacity,StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Colors } from "../../theme/colors";
 import dayjs from "dayjs";
 import { useState } from "react";
 
-export default function DatePickerExample({
+export default function DatePicker({
+  placeholder = "Pick a date",
   date,
   setDate,
   minimumDate,
   maximumDate,
 }: {
+  placeholder?: string;
   date: string,
   setDate: (date: string) => void;
   minimumDate?: Date;
@@ -25,9 +27,15 @@ export default function DatePickerExample({
   return (
     <View>
       <TouchableOpacity onPress={() => setShow(true)} style={[styles.container]}>
-        <Text>
-          {dayjs(date).format("D/M/YYYY")}
-        </Text>
+        {date ? (
+          <Text>
+            {dayjs(date).format("D/M/YYYY")}
+          </Text>
+        ) : (
+          <Text style={{color: Colors.textPlaceholder}}>
+            {placeholder}
+          </Text>
+        )}
       </TouchableOpacity>
 
       {show && (

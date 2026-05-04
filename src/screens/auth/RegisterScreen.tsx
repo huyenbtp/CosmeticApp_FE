@@ -13,14 +13,17 @@ import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { Gender } from "../profile/EditProfile";
 import { useToast } from "../../providers/ToastProvider";
+import { useRegister } from "../../services/auth.service";
+import DatePicker from "../../components/common/DatePicker";
 
 export default function RegisterScreen() {
   const navigation = useAppNavigation();
   const { showMessage } = useToast();
 
-  const [username, setUsername] = useState("");
+  //const [username, setUsername] = useState("");
   const [full_name, setFullName] = useState("");
   const [gender, setGender] = useState<Gender>("male");
+  const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,65 +31,73 @@ export default function RegisterScreen() {
 
   const [secure1, setSecure1] = useState(true);
   const [secure2, setSecure2] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
+  const { mutate, isPending } = useRegister();
 
   const handleRegister = async () => {
-    setError("");
 
-    if (!full_name || !phone || !email || !username || !password || !confirmPassword) {
-      return setError("Please fill all fields");
+    if (!full_name || !phone || !email || !password || !confirmPassword) {
+      return showMessage("Please fill all required fields", "warning");
     }
 
     if (!full_name.trim()) {
-      return setError('Full name is required');
+      return showMessage('Full name is required', "warning");
     }
 
     if (phone !== undefined) {
       const phoneRegex = /^(0|\+84)[0-9]{9}$/;
       if (!phoneRegex.test(phone)) {
-        return setError('Invalid phone number');
+        return showMessage('Invalid phone number', "warning");
       }
     }
 
-    if (!email.includes("@")) {
-      return setError("Invalid email");
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(normalizedEmail)) {
+      return showMessage("Invalid email format", "warning");
     }
 
+    /*
     if (!username.trim()) {
-      return setError('Username is required');
+      return showMessage('Username is required', "warning");
     }
 
     if (username.length < 4 || /\s/.test(username)) {
-      return setError('Username must be at least 4 characters and contain no spaces');
+      return showMessage('Username must be at least 4 characters and contain no spaces', "warning");
     }
+    */
 
-    if (password.length < 6) {
-      return setError("Password must be at least 6 characters");
+    if (password.length < 8) {
+      return showMessage("Password must be at least 8 characters", "warning");
     }
 
     if (password !== confirmPassword) {
-      return setError("Passwords do not match");
+      return showMessage("Passwords do not match", "warning");
     }
 
-    try {
-      setLoading(true);
-
-      // 🔥 gọi API register
-      // await api.post("/auth/register", {
-      //   fullName,
-      //   email,
-      //   password,
-      // });
-
-      await new Promise((r) => setTimeout(r, 1000));      //fake loading
-      showMessage("Registered successfully!");
-      navigation.replace("Login");
-    } catch (err) {
-      setError("Register failed");
-    } finally {
-      setLoading(false);
-    }
+    mutate(
+      {
+        full_name,
+        gender,
+        dob,
+        phone,
+        email,
+        password,
+      },
+      {
+        onSuccess: () => {
+          showMessage("Registered successfully!");
+          navigation.replace("Login");
+        },
+        onError: (error: any) => {
+          showMessage(error.response?.data.message, "error")
+          console.log("err: " + error.message);
+          
+        }
+      }
+    );
   };
 
   return (
@@ -135,6 +146,17 @@ export default function RegisterScreen() {
           </View>
         </View>
 
+        {/* Date of Birth */}
+        <View style={[styles.inputContainer, { gap: 0 }]}>
+          <Ionicons name="calendar-clear-outline" size={18} />
+          <DatePicker
+            placeholder="Date of Birth"
+            date={dob}
+            setDate={setDob}
+            maximumDate={new Date()}
+          />
+        </View>
+
         {/* Phone */}
         <View style={styles.inputContainer}>
           <Feather name="phone" size={18} />
@@ -160,6 +182,7 @@ export default function RegisterScreen() {
         </View>
 
         {/* Username */}
+        {/*
         <View style={styles.inputContainer}>
           <Ionicons name="person-outline" size={18} />
           <TextInput
@@ -169,6 +192,7 @@ export default function RegisterScreen() {
             style={styles.input}
           />
         </View>
+        */}
 
         {/* Password */}
         <View style={styles.inputContainer}>
@@ -206,17 +230,14 @@ export default function RegisterScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Error */}
-        {error ? <Text style={styles.error}>* {error}</Text> : null}
-
         {/* Button */}
         <TouchableOpacity
           style={styles.button}
           onPress={handleRegister}
-          disabled={loading}
+          disabled={isPending}
         >
           <Text style={styles.buttonText}>
-            {loading ? "Loading..." : "Register"}
+            {isPending ? "Loading..." : "Register"}
           </Text>
         </TouchableOpacity>
 

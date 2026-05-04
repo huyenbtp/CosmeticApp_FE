@@ -18,7 +18,7 @@ import Header from "../../components/common/Header";
 import { useMe } from "../../services/auth.service";
 import { useEffect } from "react";
 import dayjs from "dayjs";
-import DatePickerExample from "../../components/common/DatePicker";
+import DatePicker from "../../components/common/DatePicker";
 import { useUpdateProfile } from "../../services/user.service";
 import { useToast } from "../../providers/ToastProvider";
 
@@ -56,6 +56,17 @@ export default function EditProfileScreen() {
 
   const handleSave = () => {
     if (!fullName || !gender || !dob || !phone) return;
+
+    if (!fullName.trim()) {
+      return showMessage('Full name is required', "warning");
+    }
+
+    if (phone !== undefined) {
+      const phoneRegex = /^(0|\+84)[0-9]{9}$/;
+      if (!phoneRegex.test(phone)) {
+        return showMessage('Invalid phone number', "warning");
+      }
+    }
 
     mutate(
       { full_name: fullName, gender, dob, phone },
@@ -140,7 +151,7 @@ export default function EditProfileScreen() {
             {/* Date of Birth */}
             <View>
               <Text style={styles.label}>Date of Birth</Text>
-              <DatePickerExample
+              <DatePicker
                 date={dob}
                 setDate={setDob}
                 maximumDate={new Date()}

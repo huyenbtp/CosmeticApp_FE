@@ -1,6 +1,5 @@
 import { axiosInstance } from "./axios";
-import { useMutation } from "@tanstack/react-query";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const login = async (data: {
   email: string;
@@ -13,5 +12,17 @@ const login = async (data: {
 export const useLogin = () => {
   return useMutation({
     mutationFn: login,
+  });
+};
+
+const getMe = async () => {
+  const res = await axiosInstance.get("/auth/me");
+  return res.data;
+};
+
+export const useMe = () => {
+  return useQuery({
+    queryKey: ["auth/me"],
+    queryFn: getMe,
   });
 };

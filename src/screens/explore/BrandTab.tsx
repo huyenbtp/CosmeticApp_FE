@@ -149,7 +149,9 @@ export default function BrandScreen() {
           onPress={() => { navigation.navigate("BrandProducts", { brand_id: item._id }) }}
         >
           <Text style={styles.name}>{item.name}</Text>
-          <Image source={{ uri: item.logo }} style={styles.logo} />
+          {item.logo &&
+            <Image source={{ uri: item.logo }} style={styles.logo} />
+          }
         </TouchableOpacity>
       )}
 

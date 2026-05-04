@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
 import Checkbox from "expo-checkbox";
@@ -14,28 +15,68 @@ import { Colors } from "../../theme/colors";
 import { Feather, Fontisto, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import Header from "../../components/common/Header";
+import { useMe } from "../../services/auth.service";
+import { useEffect } from "react";
+import dayjs from "dayjs";
+import DatePickerExample from "../../components/common/DatePicker";
+import { useUpdateProfile } from "../../services/user.service";
+import { useToast } from "../../providers/ToastProvider";
 
 export type Gender = "male" | "female" | "other";
 
 export default function EditProfileScreen() {
   const navigation = useAppNavigation();
+  const { showMessage } = useToast();
 
-  let username = "ikikasumi";
-  let phone = "0912345678";
-  let email = "huyenbtp2005@gmail.com";
-  const [fullName, setFullName] = useState("Bui Huyen");
+  const { data: user, isLoading } = useMe();
+
+  //let phone = user.profile.phone;
+  let email = user.email;
+  const [fullName, setFullName] = useState("");
   const [gender, setGender] = useState<Gender>("female");
-  const [newPhone, setNewPhone] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [changePhone, setChangePhone] = useState(false);
-  const [changeEmail, setChangeEmail] = useState(false);
-  const [currentPass, setCurrentPass] = useState("");
+  const [dob, setDob] = useState("");
+  const [phone, setPhone] = useState("");
+  //const [newPhone, setNewPhone] = useState("");
+  //const [newEmail, setNewEmail] = useState("");
+  //const [changePhone, setChangePhone] = useState(false);
+  //const [changeEmail, setChangeEmail] = useState(false);
+  //const [currentPass, setCurrentPass] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+
+    setFullName(user.profile.full_name);
+    setGender(user.profile.gender);
+    setDob(user.profile.dob);
+    setPhone(user.profile.phone);
+
+  }, [user]);
+
+  const { mutate, isPending } = useUpdateProfile();
 
   const handleSave = () => {
-    navigation.goBack()
+    if (!fullName || !gender || !dob || !phone) return;
+
+    mutate(
+      { full_name: fullName, gender, dob, phone },
+      {
+        onSuccess: async (data) => {
+          console.log("data:" + data);
+          navigation.goBack();
+        },
+        onError: (error: any) => {
+          showMessage(error.response?.data.message, "error")
+        }
+      }
+    );
   };
 
-  return (
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+  if (user) return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -45,11 +86,11 @@ export default function EditProfileScreen() {
 
         <ScrollView>
           <View style={styles.info}>
-            {/* Username */}
+            {/* Email */}
             <View>
-              <Text style={styles.label}>Username</Text>
+              <Text style={styles.label}>Email</Text>
               <View style={styles.disabledInput}>
-                <Text>{username}</Text>
+                <Text>{email}</Text>
               </View>
               <View style={styles.noteRow}>
                 <Feather name="alert-circle" size={14} color={Colors.textLight} />
@@ -96,23 +137,30 @@ export default function EditProfileScreen() {
               </View>
             </View>
 
+            {/* Date of Birth */}
+            <View>
+              <Text style={styles.label}>Date of Birth</Text>
+              <DatePickerExample
+                date={dob}
+                setDate={setDob}
+                maximumDate={new Date()}
+              />
+            </View>
+
             {/* Phone */}
             <View>
               <Text style={styles.label}>Phone Number</Text>
-              <View style={styles.disabledInput}>
-                <Text>{phone}</Text>
-              </View>
-            </View>
-
-            {/* Email */}
-            <View>
-              <Text style={styles.label}>Email</Text>
-              <View style={styles.disabledInput}>
-                <Text>{email}</Text>
-              </View>
+              <TextInput
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="Enter new phone number"
+                style={styles.input}
+                keyboardType="numeric"
+              />
             </View>
 
             {/* Options */}
+            {/**
             <View>
               <View style={styles.checkboxRow}>
                 <Checkbox
@@ -124,6 +172,7 @@ export default function EditProfileScreen() {
                 <Text style={styles.checkboxText}>Change Phone Number</Text>
               </View>
 
+              
               <View style={styles.checkboxRow}>
                 <Checkbox
                   value={changeEmail}
@@ -161,7 +210,7 @@ export default function EditProfileScreen() {
                   </View>
                 )}
 
-                {(changePhone || changeEmail) && (
+                (changePhone) && (
                   <View>
                     <Text style={styles.label}>Current password *</Text>
                     <TextInput
@@ -172,15 +221,16 @@ export default function EditProfileScreen() {
                       secureTextEntry={true}
                     />
                   </View>
-                )}
+                )
               </View>
             </View>
+            */}
           </View>
         </ScrollView>
 
         {/* Footer */}
         <View style={styles.footerContainer}>
-          <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+          <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={isLoading || isPending}>
             <Text style={styles.saveText}>SAVE</Text>
           </TouchableOpacity>
         </View>

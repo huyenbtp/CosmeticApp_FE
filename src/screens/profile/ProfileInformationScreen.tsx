@@ -1,13 +1,16 @@
-import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import Header from "../../components/common/Header";
+import { useMe } from "../../services/auth.service";
+import { useEffect } from "react";
+import dayjs from "dayjs";
 
 const mockUser = {
-  username: "ikikasumi",
   name: "Phuong Huyen",
   gender: "female",
+  dob: "",
   phone: "0912345678",
   email: "huyenbtp2005@gmail.com",
 };
@@ -15,33 +18,44 @@ const mockUser = {
 export default function ProfileInformationScreen() {
   const navigation = useAppNavigation();
 
-  const user = mockUser;
+  const { data: user, isLoading } = useMe();
 
-  return (
+  useEffect(() => {
+    //console.log(user);
+    if (!user) return;
+    
+  }, [user]);
+
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+  if (user) return (
     <View style={styles.container}>
       <Header title="Personal Information" />
 
       <View style={styles.info}>
         <View style={styles.row}>
-          <Text style={styles.label}>Username</Text>
-          <Text style={styles.value}>{user.username}</Text>
-        </View>
-
-        <View style={styles.row}>
           <Text style={styles.label}>Name</Text>
-          <Text style={styles.value}>{user.name}</Text>
+          <Text style={styles.value}>{user.profile.full_name}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Gender</Text>
           <Text style={styles.value}>
-            {user.gender === "male" ? "Male" : user.gender === "female" ? "Female" : "Prefer not to say"}
-            </Text>
+            {user.profile.gender === "male" ? "Male" : user.profile.gender === "female" ? "Female" : "Prefer not to say"}
+          </Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Date of Birth</Text>
+          <Text style={styles.value}>{dayjs(user.profile.dob).format("DD/MM/YYYY")}</Text>
         </View>
 
         <View style={styles.row}>
           <Text style={styles.label}>Phone Number</Text>
-          <Text style={styles.value}>{user.phone}</Text>
+          <Text style={styles.value}>{user.profile.phone}</Text>
         </View>
 
         <View style={styles.row}>

@@ -7,6 +7,8 @@ import ProductCard from "../../components/product/ProductCard";
 import { mockRecommendProducts } from "../home/HomeScreen";
 import ReviewCard from "../../components/review/ReviewCard";
 import Header from "../../components/common/Header";
+import ProductActionModal from "../../components/product/ProductActionModal";
+import { useState } from "react";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -25,6 +27,15 @@ const mockProduct = {
     _id: "1",
     name: "Hada Labo",
   },
+  skinTypes: [
+    { _id: "1", name: "oily skin" },
+    { _id: "2", name: "dry skin" },
+    { _id: "3", name: "normal skin" },
+    { _id: "4", name: "acne skin" },
+  ],
+  tags: [
+    { _id: "1", name: "hyaluronic" },
+  ],
   selling_price: 100000,
   description: "Kem rửa mặt Hada Labo dưỡng ẩm với công dụng làm sạch sâu cùng hệ dưỡng ẩm sâu giúp dưỡng da ẩm mượt, sáng mịn, tươi trẻ mỗi ngày",
   image: 'https://picsum.photos/300/300',
@@ -52,14 +63,22 @@ const mockProduct = {
   isOnWishlist: false,
 };
 
-export default function ProductInformationScreen() {
-  const navigation = useAppNavigation();
+export default function ProductInformationScreen({ navigation, route }: any) {
+  const { product_id } = route.params;
 
   const data = mockProduct;
+  const [type, setType] = useState<"add_to_cart" | "buy">("add_to_cart");
+  const [showModal, setShowModal] = useState(false);
 
   const handleAddToWishlist = () => {
 
-  }
+  };
+  const handleAddToCart = (id: string, quantity: number) => {
+
+  };
+  const handleBuyNow = (id: string, quantity: number) => {
+
+  };
 
   return (
     <View style={styles.container}>
@@ -186,11 +205,14 @@ export default function ProductInformationScreen() {
               }}>
                 <Text style={{ fontWeight: 500, fontSize: 14, }}>Description</Text>
               </View>
-              <TouchableOpacity style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 8,
-              }}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+                onPress={() => navigation.navigate("ProductDescription", { data })}
+              >
                 <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />
               </TouchableOpacity>
@@ -210,7 +232,7 @@ export default function ProductInformationScreen() {
                     alignItems: "center",
                     gap: 8,
                   }}
-                  onPress={() => navigation.navigate("ReviewList", { product_id: data._id })}
+                  onPress={() => navigation.navigate("ReviewList", { product_id })}
                 >
                   <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View all</Text>
                   <Ionicons name="chevron-forward-outline" size={14} />
@@ -255,7 +277,10 @@ export default function ProductInformationScreen() {
       <View style={styles.footerContainer}>
         <TouchableOpacity
           style={styles.addToCartButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            setType("add_to_cart")
+            setShowModal(true)
+          }}
         >
           <Ionicons name="cart-outline" size={18} color="white" />
           <Text style={styles.buttonText}>ADD TO CART</Text>
@@ -263,11 +288,27 @@ export default function ProductInformationScreen() {
 
         <TouchableOpacity
           style={styles.buyButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            setType("buy")
+            setShowModal(true)
+          }}
         >
           <Text style={styles.buttonText}>BUY NOW</Text>
         </TouchableOpacity>
       </View>
+
+      <ProductActionModal
+        visible={showModal}
+        product={data}
+        onClose={() => setShowModal(false)}
+        onAdd={(qty) => {
+          handleAddToCart(product_id, qty);
+        }}
+        onBuyNow={(qty) => {
+          handleBuyNow(product_id, qty);
+        }}
+        type={type}
+      />
     </View>
   );
 }

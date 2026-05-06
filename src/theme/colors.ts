@@ -72,6 +72,7 @@ export const Colors = {
 
   // Rating / highlight
   rating: "#FFAB07",
+  heart: "#ee2c2c",
   highlight: "#FFF0F5",
 
   // Button states

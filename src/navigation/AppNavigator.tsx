@@ -21,6 +21,8 @@ import ShippingInformationScreen from "../screens/order/OrderInformation/Shippin
 import CheckoutScreen from "../screens/order/Checkout/CheckoutScreen";
 import { IUserAddress } from "../types/userAddress";
 import RegisterScreen from "../screens/auth/RegisterScreen";
+import ProductViewHistoryScreen from "../screens/profile/ViewHistoryScreen";
+import WishlistScreen from "../screens/profile/WishlistScreen";
 
 export type RootStackParamList = {
   AddressList: { withCheckbox?: boolean, selectedAddressId?: string }
@@ -43,8 +45,8 @@ export type RootStackParamList = {
   Search: undefined
   SearchResults: { keyword: string }
   ShippingInformation: { order_id: string }
-  Wishlist: undefined
   ViewHistory: undefined
+  Wishlist: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -84,6 +86,8 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="ReviewList" component={ReviewListScreen} />
       <Stack.Screen name="Search" component={SearchScreen} />
       <Stack.Screen name="SearchResults" component={SearchResultScreen} />
+      <Stack.Screen name="ViewHistory" component={ProductViewHistoryScreen} />
+      <Stack.Screen name="Wishlist" component={WishlistScreen} />
     </Stack.Navigator>
   );
 }

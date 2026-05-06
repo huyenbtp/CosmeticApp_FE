@@ -88,11 +88,11 @@ export default function ProfileScreen() {
                 <FontAwesome6 name="map-location-dot" size={30} style={styles.buttonIcon} />
                 <Text style={styles.buttonText}>Shipping Address</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Wishlist")}>
                 <Ionicons name="heart-outline" size={30} style={styles.buttonIcon} />
                 <Text style={styles.buttonText}>Wishlist</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ViewHistory")}>
                 <MaterialCommunityIcons name="history" size={30} style={styles.buttonIcon} />
                 <Text style={styles.buttonText}>View History</Text>
               </TouchableOpacity>

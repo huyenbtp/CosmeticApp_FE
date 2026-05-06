@@ -3,45 +3,92 @@ import { IProduct } from "../../types/product";
 import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import StarRating from "../common/StarRating";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
-export default function ProductCard({ item }: { item: IProduct }) {
+export default function ProductCard({
+  item,
+  type = "default",
+  onUnlike,
+}: {
+  item: IProduct;
+  type?: "default" | "view_history_item" | "wishlist_item";
+  onUnlike?: () => void
+}) {
   const navigation = useAppNavigation();
 
   return (
     <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.push("ProductInformation", { product_id: item._id })}
+      style={[
+        styles.container,
+        type == "view_history_item" && { padding: 0, height: 270, gap: 0 },
+        type == "wishlist_item" && { padding: 0, height: 270, gap: 0 }
+      ]}
+      onPress={() => navigation.push(
+        "ProductInformation",
+        { product_id: item._id }
+      )}
     >
-      <Image source={{ uri: item.image }} style={styles.image} />
+      <View>
+        <Image
+          source={{ uri: item.image }}
+          style={[
+            styles.image,
+            type !== "default" && { height: 180, borderRadius: 0 }
+          ]}
+        />
 
-      <View style={styles.info}>
+        {type == "wishlist_item" && onUnlike && (
+          <TouchableOpacity
+            style={styles.unlikeButton}
+            onPress={onUnlike}
+          >
+            <Ionicons name="heart" color={Colors.heart} size={22} />
+          </TouchableOpacity>
+        )}
+      </View>
+
+      <View style={[styles.info, type !== "default" && { padding: 6 }]}>
         <View style={styles.part}>
-          <Text numberOfLines={2} style={styles.brand}>
-            {item.brand?.toUpperCase()}
-          </Text>
+          {type === "default" && (
+            <Text
+              numberOfLines={2}
+              style={styles.brand}
+            >
+              {item.brand?.toUpperCase()}
+            </Text>
+          )}
 
-          <Text numberOfLines={2} style={styles.name}>
+          <Text
+            numberOfLines={2}
+            style={[
+              styles.name,
+              type !== "default" && { fontSize: 13, fontWeight: 400 }
+            ]}
+          >
             {item.name}
           </Text>
         </View>
 
         <View style={styles.part}>
-          <View style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 6
-          }}>
-            <StarRating rating={item.rating} />
-            <Text style={{ color: Colors.rating, fontWeight: 500, fontSize: 12 }}>
-              {item.rating.toFixed(1)}
-            </Text>
-          </View>
+          {type === "default" && (
+            <View style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6
+            }}>
+              <StarRating rating={item.rating} />
+              <Text style={{ color: Colors.rating, fontWeight: 500, fontSize: 12 }}>
+                {item.rating.toFixed(1)}
+              </Text>
+            </View>
+          )}
 
           <Text style={styles.price}>
             {item.selling_price.toLocaleString()}₫
           </Text>
         </View>
       </View>
+
     </TouchableOpacity>
   );
 }
@@ -83,4 +130,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Colors.primary,
   },
+
+  unlikeButton: {
+    position: "absolute",
+    top: 6,
+    right: 6,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    padding: 3,
+    borderRadius: 30,
+  }
 });

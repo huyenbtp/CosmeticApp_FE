@@ -63,7 +63,7 @@ export const Colors = {
 
   bgSuccess1: "#dcfce7",
   bgError1: "#ffe2e2",
-  bgWarning1: "#fef9c2",
+  bgWarning1: "#fcf9d0",
   bgInfo1: "#dbeafe",
 
   // Extra (rất hữu ích)

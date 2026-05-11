@@ -11,10 +11,67 @@ export default function ProductCard({
   onUnlike,
 }: {
   item: IProduct;
-  type?: "default" | "view_history_item" | "wishlist_item";
+  type?: "default" | "horizontal" | "view_history_item" | "wishlist_item";
   onUnlike?: () => void
 }) {
   const navigation = useAppNavigation();
+
+  const handleSelect = () => {
+    navigation.push(
+      "ProductInformation",
+      { product_id: item._id }
+    )
+  }
+  if (type === "horizontal") return (
+    <TouchableOpacity
+      style={[styles.container, { height: 250 }]}
+      onPress={() => handleSelect()}
+    >
+      <View>
+        <Image
+          source={{ uri: item.image || undefined }}
+          style={[styles.image, { height: 150 }]}
+        />
+      </View>
+
+      <View style={[styles.info,]}>
+        <View style={styles.part}>
+          <Text
+            numberOfLines={1}
+            style={[styles.name,]}
+          >
+            {item.name}
+          </Text>
+          <Text style={styles.price}>
+            {item.selling_price.toLocaleString()}₫
+          </Text>
+        </View>
+
+        <View style={styles.part}>
+          <View style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 4,
+            marginRight: "auto",
+            paddingVertical: 0.5,
+            paddingHorizontal: 5,
+            backgroundColor: Colors.bgWarning1,
+            borderColor: Colors.rating,
+            borderWidth: 0.5,
+          }}>
+            <Ionicons
+              name="star"
+              size={12}
+              color={Colors.rating}
+            />
+            <Text style={{ fontWeight: 400, fontSize: 10 }}>
+              {item.avg_rating.toFixed(1)}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  )
 
   return (
     <TouchableOpacity
@@ -30,7 +87,7 @@ export default function ProductCard({
     >
       <View>
         <Image
-          source={{ uri: item.image }}
+          source={{ uri: item.image || undefined }}
           style={[
             styles.image,
             type !== "default" && { height: 180, borderRadius: 0 }
@@ -76,9 +133,9 @@ export default function ProductCard({
               alignItems: "center",
               gap: 6
             }}>
-              <StarRating rating={item.rating} />
+              <StarRating rating={item.avg_rating} />
               <Text style={{ color: Colors.rating, fontWeight: 500, fontSize: 12 }}>
-                {item.rating.toFixed(1)}
+                {item.avg_rating.toFixed(1)}
               </Text>
             </View>
           )}
@@ -95,7 +152,7 @@ export default function ProductCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.card,
     height: 310,
     gap: 12,
     padding: 6,

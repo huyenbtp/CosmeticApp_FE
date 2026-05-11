@@ -1,14 +1,15 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions, ActivityIndicator } from "react-native";
 import { Colors } from "../../theme/colors";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import StarRating from "../../components/common/StarRating";
 import ProductCard from "../../components/product/ProductCard";
-import { mockRecommendProducts } from "../home/HomeScreen";
 import ReviewCard from "../../components/review/ReviewCard";
 import Header from "../../components/common/Header";
 import ProductActionModal from "../../components/product/ProductActionModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProductDetail } from "../../services/product.service";
+import { useRecommendProducts } from "../../services/recommendation.service";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -42,8 +43,8 @@ const mockProduct = {
   stock_quantity: 45,
   totalSold: 234,
   status: "published",
-  rating: 4.5,
-  numberOfReview: 55,
+  avg_rating: 4.5,
+  review_count: 55,
   reviews: [
     {
       _id: "1",
@@ -66,9 +67,14 @@ const mockProduct = {
 export default function ProductInformationScreen({ navigation, route }: any) {
   const { product_id } = route.params;
 
-  const data = mockProduct;
+  const { data: productDetail, isLoading } = useProductDetail(product_id);
+  const { data: recommendProducts } = useRecommendProducts(10);
   const [type, setType] = useState<"add_to_cart" | "buy">("add_to_cart");
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    //console.log(data)
+  }, [productDetail]);
 
   const handleAddToWishlist = () => {
 
@@ -80,12 +86,17 @@ export default function ProductInformationScreen({ navigation, route }: any) {
 
   };
 
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
   return (
     <View style={styles.container}>
       <Header hasCart />
 
       <FlatList
-        data={mockRecommendProducts}
+        data={recommendProducts}
         keyExtractor={(item) => item._id}
         numColumns={2}
         renderItem={({ item }) => (
@@ -99,7 +110,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
         ListHeaderComponent={
           <>
             <Image
-              source={{ uri: data.image }}
+              source={{ uri: productDetail.image || undefined }}
               style={{
                 width: "100%",
                 height: 420,
@@ -114,19 +125,19 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                 alignItems: "center",
               }}>
                 <Text style={styles.price}>
-                  {data.selling_price.toLocaleString()}₫
+                  {productDetail.selling_price.toLocaleString()}₫
                 </Text>
                 <TouchableOpacity onPress={handleAddToWishlist}>
                   <Ionicons
-                    name={data.isOnWishlist ? "heart" : "heart-outline"}
+                    name={productDetail.isOnWishlist ? "heart" : "heart-outline"}
                     size={24}
-                    color={data.isOnWishlist ? Colors.secondary : Colors.text}
+                    color={productDetail.isOnWishlist ? Colors.secondary : Colors.text}
                   />
                 </TouchableOpacity>
               </View>
 
               <Text style={{ fontSize: 16, fontWeight: 600 }}>
-                {data.name}
+                {productDetail.name}
               </Text>
 
               {/** rating and sku */}
@@ -141,9 +152,9 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                   alignItems: "center",
                   gap: 6
                 }}>
-                  <StarRating rating={data.rating} />
+                  <StarRating rating={productDetail.avg_rating} />
                   <Text style={{ color: Colors.textSecondary, fontWeight: 500, fontSize: 12 }}>
-                    {data.numberOfReview} review
+                    {productDetail.review_count} review
                   </Text>
                 </View>
 
@@ -153,7 +164,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                   gap: 4,
                 }}>
                   <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>SKU:</Text>
-                  <Text style={{ fontWeight: 500, fontSize: 12, }}>{data.sku}</Text>
+                  <Text style={{ fontWeight: 500, fontSize: 12, }}>{productDetail.sku}</Text>
                 </View>
               </View>
             </View>
@@ -174,7 +185,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                 gap: 4,
               }}>
                 <Text style={{ color: Colors.textSecondary, fontSize: 13, }}>Brand:</Text>
-                <Text style={{ fontWeight: 500, fontSize: 13, }}>{data.brand.name}</Text>
+                <Text style={{ fontWeight: 500, fontSize: 13, }}>{productDetail.brand.name}</Text>
               </View>
               <TouchableOpacity
                 style={{
@@ -182,7 +193,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                   alignItems: "center",
                   gap: 8,
                 }}
-                onPress={() => navigation.navigate("BrandProducts", { brand_id: data.brand._id })}
+                onPress={() => navigation.navigate("BrandProducts", { brand_id: productDetail.brand._id })}
               >
                 <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />
@@ -211,7 +222,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                   alignItems: "center",
                   gap: 8,
                 }}
-                onPress={() => navigation.navigate("ProductDescription", { data })}
+                onPress={() => navigation.navigate("ProductDescription", { data: productDetail })}
               >
                 <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />
@@ -243,18 +254,18 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                 alignItems: "center",
                 gap: 6
               }}>
-                <StarRating rating={data.rating} />
+                <StarRating rating={productDetail.avg_rating} />
                 <Text style={{ color: Colors.rating, fontWeight: 500, fontSize: 12 }}>
-                  {data.rating.toFixed(1)}
+                  {productDetail.avg_rating.toFixed(1)}
                 </Text>
                 <Text style={{ color: Colors.textSecondary, fontSize: 10 }}>
-                  ({data.numberOfReview} review)
+                  ({productDetail.review_count} review)
                 </Text>
               </View>
             </View>
 
             <View style={{ marginHorizontal: 12, marginTop: 6, gap: 10, }}>
-              {data.reviews.map((item) => (
+              {productDetail.reviews.map((item: any) => (
                 <ReviewCard item={item} key={item._id} />
               ))}
             </View>
@@ -299,7 +310,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
 
       <ProductActionModal
         visible={showModal}
-        product={data}
+        product={productDetail}
         onClose={() => setShowModal(false)}
         onAdd={(qty) => {
           handleAddToCart(product_id, qty);

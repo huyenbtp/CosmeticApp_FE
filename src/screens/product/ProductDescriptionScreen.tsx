@@ -6,17 +6,15 @@ import Header from "../../components/common/Header";
 export default function ProductDescriptionScreen({ navigation, route }: any) {
   const { data } = route.params;
 
-  useEffect(() => {
-
-  }, []);
-
   return (
     <View style={styles.container}>
       <Header title="Description" />
 
-      <View style={styles.section}>
-        <Text style={styles.text300}>{data.description}</Text>
-      </View>
+      {data.description && (
+        <View style={styles.section}>
+          <Text style={styles.text300}>{data.description}</Text>
+        </View>
+      )}
 
       <View style={styles.section}>
         <View style={styles.row}>

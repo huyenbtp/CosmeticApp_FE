@@ -10,9 +10,10 @@ export default function ProductCarousel({ data }: { data: IProduct[] }) {
       }
       renderItem={({ item }) => (
         <View style={styles.item}>
-          <ProductCard item={item} />
+          <ProductCard item={item} type="horizontal" />
         </View>
       )}
+      contentContainerStyle={styles.container}
       horizontal
       showsHorizontalScrollIndicator={false}
     />
@@ -20,8 +21,12 @@ export default function ProductCarousel({ data }: { data: IProduct[] }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingLeft: 12,
+    paddingVertical: 10,
+  },
   item: {
     width: 160,
-    marginRight: 15,
+    marginRight: 10,
   },
 });

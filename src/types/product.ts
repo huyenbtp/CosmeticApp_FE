@@ -7,7 +7,7 @@ export interface IProduct {
   name: string;
   selling_price: number;
   image: string;
-  rating: number;
+  avg_rating: number;
   brand?: string;
 }
 
@@ -25,8 +25,8 @@ export interface IProductDetail {
   stock_quantity: number;
   totalSold: number;
   status: string;
-  rating: number;
-  numberOfReview: number;
+  avg_rating: number;
+  review_count: number;
   reviews: IReview[];
   isOnWishlist: boolean;
 }

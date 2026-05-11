@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Dimensions, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import BrandCarousel from "../../components/brand/BrandCarousel";
@@ -9,6 +9,8 @@ import ProductCard from "../../components/product/ProductCard";
 import AutoBanner from "./AutoBanner";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import Header from "../../components/common/Header";
+import { useNewProducts, useRecommendProducts } from "../../services/recommendation.service";
+import { useEffect } from "react";
 
 export const mockRecommendProducts: IProduct[] = [
   {
@@ -17,7 +19,7 @@ export const mockRecommendProducts: IProduct[] = [
     brand: "Dior",
     selling_price: 850000,
     image: "https://picsum.photos/200/300?random=1",
-    rating: 4.5,
+    avg_rating: 4.5,
   },
   {
     _id: "2",
@@ -25,7 +27,7 @@ export const mockRecommendProducts: IProduct[] = [
     brand: "Estee Lauder",
     selling_price: 1200000,
     image: "https://picsum.photos/200/300?random=2",
-    rating: 4.9,
+    avg_rating: 4.9,
   },
   {
     _id: "3",
@@ -33,7 +35,7 @@ export const mockRecommendProducts: IProduct[] = [
     brand: "MAC",
     selling_price: 600000,
     image: "https://picsum.photos/200/300?random=3",
-    rating: 4.5,
+    avg_rating: 4.5,
   },
   {
     _id: "4",
@@ -41,7 +43,7 @@ export const mockRecommendProducts: IProduct[] = [
     brand: "Innisfree",
     selling_price: 300000,
     image: "https://picsum.photos/200/300?random=4",
-    rating: 5.0,
+    avg_rating: 5.0,
   },
   {
     _id: "5",
@@ -49,7 +51,7 @@ export const mockRecommendProducts: IProduct[] = [
     brand: "Dior",
     selling_price: 850000,
     image: "https://picsum.photos/200/300?random=5",
-    rating: 0,
+    avg_rating: 0,
   },
   {
     _id: "6",
@@ -57,7 +59,7 @@ export const mockRecommendProducts: IProduct[] = [
     brand: "Estee Lauder",
     selling_price: 1200000,
     image: "https://picsum.photos/200/300?random=6",
-    rating: 4,
+    avg_rating: 4,
   },
 ];
 
@@ -67,14 +69,24 @@ const PADDING_HORIZONTAL = 14;
 const ITEM_WIDTH = (width - PADDING_HORIZONTAL * 2 - COLUMN_GAP) / 2;
 
 export default function HomeScreen() {
-  const navigation = useAppNavigation();
+  const { data: recommendProducts, isLoading: isRecommendProductsLoading } = useRecommendProducts(10);
+  const { data: newProducts, isLoading: isNewProductsLoading } = useNewProducts(10);
 
+  useEffect(() => {
+
+  }, [recommendProducts]);
+
+  if (isRecommendProductsLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
   return (
     <View style={styles.container}>
       <Header hasGoBack={false} hasSearchBar hasCart />
 
       <FlatList
-        data={mockRecommendProducts}
+        data={recommendProducts}
         keyExtractor={(item) => item._id}
         numColumns={2}
         renderItem={({ item }) => (
@@ -99,7 +111,14 @@ export default function HomeScreen() {
               <AutoBanner />
             </View>
 
-            <View style={styles.forYouContainer}>
+            <View style={styles.titleContainer}>
+              <FontAwesome name="star" size={16} color={Colors.rating} />
+              <Text style={styles.title}>New Products</Text>
+            </View>
+
+            <ProductCarousel data={newProducts} />
+
+            <View style={styles.titleContainer}>
               <FontAwesome name="heart" size={16} color={Colors.secondary} />
               <Text style={styles.title}>For You</Text>
             </View>
@@ -122,7 +141,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingHorizontal: PADDING_HORIZONTAL,
   },
-  forYouContainer: {
+  titleContainer: {
     backgroundColor: Colors.background,
     flexDirection: "row",
     alignItems: "center",

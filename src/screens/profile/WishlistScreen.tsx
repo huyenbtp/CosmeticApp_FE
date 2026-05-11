@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet, FlatList, Dimensions, } from "react-native";
+import { View, Text, StyleSheet, FlatList, Dimensions, ActivityIndicator, } from "react-native";
 import { Colors } from "../../theme/colors";
 import ProductCard from "../../components/product/ProductCard";
-import { mockRecommendProducts } from "../home/HomeScreen";
 import { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
+import { useAddRemoveWishlist, useWishlistItems } from "../../services/wishlist.service";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 10;
@@ -12,22 +12,46 @@ const ITEM_WIDTH = (width - PADDING_HORIZONTAL * 2 - COLUMN_GAP) / 2;
 
 export default function WishlistScreen() {
 
-  const products = mockRecommendProducts;
+  const { data, isLoading, refetch } = useWishlistItems();
 
   useEffect(() => {
 
   }, []);
 
-  const handleUnlike = (product_id: string) => {
+  const { mutate: remove } = useAddRemoveWishlist("remove");
 
+  const handleUnlike = (product_id: string) => {
+    remove(
+      product_id,
+      {
+        onSuccess: () => {
+          refetch()
+        }
+      }
+    );
   };
 
+  const renderEmpty = () => {
+    return (
+      <View style={{ alignItems: "center", marginTop: 50 }}>
+        <Text style={{ color: Colors.textSecondary }}>
+          Nothing here
+        </Text>
+      </View>
+    )
+  }
+
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
   return (
     <View style={styles.container}>
       <Header title="Wishlist" hasCart />
 
       <FlatList
-        data={products}
+        data={data}
         keyExtractor={(item) => item._id}
         numColumns={2}
         renderItem={({ item }) => (
@@ -42,6 +66,7 @@ export default function WishlistScreen() {
         contentContainerStyle={styles.productsContainer}
         columnWrapperStyle={styles.productsRow}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={renderEmpty}
       />
     </View>
   );

@@ -10,6 +10,8 @@ import ProductActionModal from "../../components/product/ProductActionModal";
 import { useEffect, useState } from "react";
 import { useProductDetail } from "../../services/product.service";
 import { useRecommendProducts } from "../../services/recommendation.service";
+import { useAddRemoveWishlist } from "../../services/wishlist.service";
+import { useRecordProductViewHistory } from "../../services/viewHistory.service";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -67,22 +69,46 @@ const mockProduct = {
 export default function ProductInformationScreen({ navigation, route }: any) {
   const { product_id } = route.params;
 
+  const [viewed, setViewed] = useState(0);
+
   const { data: productDetail, isLoading } = useProductDetail(product_id);
   const { data: recommendProducts } = useRecommendProducts(10);
   const [type, setType] = useState<"add_to_cart" | "buy">("add_to_cart");
   const [showModal, setShowModal] = useState(false);
 
+  const { mutate: recordView } = useRecordProductViewHistory();
+  const [isOnWishlist, setIsOnWishlist] = useState(false);
+  const {
+    mutate: addRemoveWishlist,
+  } = useAddRemoveWishlist(isOnWishlist ? "remove" : "add");
+
   useEffect(() => {
-    //console.log(data)
+    //console.log(productDetail)
+    if (!productDetail) return;
+
+    setViewed(viewed + 1);
+    setIsOnWishlist(productDetail.isOnWishlist);
   }, [productDetail]);
 
-  const handleAddToWishlist = () => {
+  useEffect(() => {
+    if (viewed == 1) recordView(product_id);
+  }, [viewed]);
+
+  const handleAddRemoveWishlist = () => {
+    addRemoveWishlist(
+      product_id,
+      {
+        onSuccess: async () => {
+          setIsOnWishlist(!isOnWishlist)
+        }
+      }
+    )
+  };
+
+  const handleAddToCart = (quantity: number) => {
 
   };
-  const handleAddToCart = (id: string, quantity: number) => {
-
-  };
-  const handleBuyNow = (id: string, quantity: number) => {
+  const handleBuyNow = (quantity: number) => {
 
   };
 
@@ -127,11 +153,13 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                 <Text style={styles.price}>
                   {productDetail.selling_price.toLocaleString()}₫
                 </Text>
-                <TouchableOpacity onPress={handleAddToWishlist}>
+                <TouchableOpacity
+                  onPress={handleAddRemoveWishlist}
+                >
                   <Ionicons
-                    name={productDetail.isOnWishlist ? "heart" : "heart-outline"}
+                    name={isOnWishlist ? "heart" : "heart-outline"}
                     size={24}
-                    color={productDetail.isOnWishlist ? Colors.secondary : Colors.text}
+                    color={isOnWishlist ? Colors.secondary : Colors.text}
                   />
                 </TouchableOpacity>
               </View>
@@ -313,10 +341,10 @@ export default function ProductInformationScreen({ navigation, route }: any) {
         product={productDetail}
         onClose={() => setShowModal(false)}
         onAdd={(qty) => {
-          handleAddToCart(product_id, qty);
+          handleAddToCart(qty);
         }}
         onBuyNow={(qty) => {
-          handleBuyNow(product_id, qty);
+          handleBuyNow(qty);
         }}
         type={type}
       />

@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 6,
     overflow: "hidden",
-    elevation: 1
+    boxShadow: `0px 0px 4px #eeeeee`,
   },
   image: {
     width: "100%",

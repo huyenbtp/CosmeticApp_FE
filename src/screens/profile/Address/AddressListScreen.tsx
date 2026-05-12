@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, } from "react-native";
-import { Colors } from "../../theme/colors";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, } from "react-native";
+import { Colors } from "../../../theme/colors";
 import { Feather, Fontisto, Ionicons } from "@expo/vector-icons";
-import Header from "../../components/common/Header";
-import { IUserAddress } from "../../types/userAddress";
-import { useAppNavigation } from "../../navigation/useAppNavigation";
-import { useCheckoutStore } from "../../stores/checkout.store";
+import Header from "../../../components/common/Header";
+import { IUserAddress } from "../../../types/userAddress";
+import { useAppNavigation } from "../../../navigation/useAppNavigation";
+import { useCheckoutStore } from "../../../stores/checkout.store";
+import { useUserAddresses } from "../../../services/userAddress.service";
 
-const mockAddresses: IUserAddress[] = [
+const mockAddresses = [
   {
     _id: "1",
     user_id: "1",
@@ -34,10 +35,16 @@ const mockAddresses: IUserAddress[] = [
 export default function AddressListScreen({ route }: any) {
   const navigation = useAppNavigation()
   const { withCheckbox } = route.params;
-  const data = mockAddresses;
+
+  const { data, isLoading } = useUserAddresses();
 
   const { selectedAddress, setSelectedAddress } = useCheckoutStore();
 
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
   return (
     <View style={styles.container}>
       <Header title="My Address" />
@@ -47,7 +54,7 @@ export default function AddressListScreen({ route }: any) {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.item} key={item._id}>
-            {withCheckbox && (
+            {withCheckbox && selectedAddress && (
               <TouchableOpacity onPress={() => {
                 navigation.popTo("Checkout")
                 setSelectedAddress(item)
@@ -62,7 +69,13 @@ export default function AddressListScreen({ route }: any) {
             <View style={{ gap: 12, flex: 1 }}>
               <View style={styles.row}>
                 <Text style={styles.name}>{item.receiver_name} | {item.phone}</Text>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate(
+                    "CreateEditAddress",
+                    { mode: "edit", editingAddress: item }
+                  )}
+                >
                   <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
               </View>
@@ -90,7 +103,13 @@ export default function AddressListScreen({ route }: any) {
 
       {/* Bottom */}
       <View style={styles.footerContainer}>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigation.navigate(
+            "CreateEditAddress",
+            { mode: "create" }
+          )}
+        >
           <Text style={styles.addButtonText}>ADD A SHIPPING ADDRESS</Text>
         </TouchableOpacity>
       </View>

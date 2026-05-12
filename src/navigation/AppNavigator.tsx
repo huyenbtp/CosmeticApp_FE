@@ -10,7 +10,8 @@ import FilterScreen, { IFilter } from "../screens/explore/FilterScreen";
 import CartScreen from "../screens/cart/CartScreen";
 import CategoryProductsScreen from "../screens/explore/CategoryProducts";
 import ProfileInformationScreen from "../screens/profile/ProfileInformationScreen";
-import AddressListScreen from "../screens/profile/AddressListScreen";
+import AddressListScreen from "../screens/profile/Address/AddressListScreen";
+import CreateEditAddressScreen from "../screens/profile/Address/CreateEditAddress";
 import MyOrdersScreen from "../screens/order/MyOrders/MyOrdersScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import EditProfileScreen from "../screens/profile/EditProfile";
@@ -26,12 +27,13 @@ import WishlistScreen from "../screens/profile/WishlistScreen";
 import ProductDescriptionScreen from "../screens/product/ProductDescriptionScreen";
 
 export type RootStackParamList = {
-  AddressList: { withCheckbox?: boolean, selectedAddressId?: string }
+  AddressList: { withCheckbox?: boolean }
   BrandProducts: { brand_id: string }
   Cart: undefined
   CategoryProducts: { category_id: string }
   ChangePassword: undefined
-  Checkout: undefined;
+  Checkout: undefined
+  CreateEditAddress: {mode: "create" | "edit", editingAddress?: any}
   EditProfile: undefined
   Filter: { currentFilter: IFilter, handleApply: (filter: IFilter) => void }
   Login: undefined
@@ -75,6 +77,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="Cart" component={CartScreen} />
       <Stack.Screen name="CategoryProducts" component={CategoryProductsScreen} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} />
+      <Stack.Screen name="CreateEditAddress" component={CreateEditAddressScreen} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="Filter" component={FilterScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />

@@ -18,6 +18,7 @@ import { Feather } from "@expo/vector-icons";
 import { IUserAddress } from "../../../types/userAddress";
 import PaymentMethodCard, { PaymentMethodType } from "../../../components/payment/PaymentMethodCard";
 import { useCheckoutStore } from "../../../stores/checkout.store";
+import { useDefaultUserAddresses } from "../../../services/userAddress.service";
 
 type RouteProps = RouteProp<RootStackParamList, "Checkout">;
 
@@ -39,6 +40,7 @@ export default function CheckoutScreen({ navigation }: any) {
   const {
     selectedItems,
     selectedAddress,
+    setSelectedAddress,
     selectedPayment,
     setSelectedPayment,
     notes,
@@ -71,10 +73,13 @@ export default function CheckoutScreen({ navigation }: any) {
     //navigation.replace("OrderSuccessfully");
   };
 
+  const { data: defaultUserAddress } = useDefaultUserAddresses();
+
   useEffect(() => {
-    if (!selectedAddress) {
-      navigation.navigate("AddressList", { withCheckbox: true })
-    }
+    setSelectedPayment("cod")
+    setNotes("")
+    if (defaultUserAddress) setSelectedAddress(defaultUserAddress)
+    else navigation.navigate("AddressList", { withCheckbox: true })
   }, []);
 
   if (!selectedAddress || !selectedItems) return;
@@ -96,11 +101,7 @@ export default function CheckoutScreen({ navigation }: any) {
               <View style={{ backgroundColor: Colors.secondary100, padding: 12 }}>
                 <TouchableOpacity
                   style={[styles.section, { borderRadius: 12 }]}
-                  onPress={() => navigation.navigate(
-                    "AddressList", {
-                    withCheckbox: true,
-                    selectedAddressId: selectedAddress._id,
-                  })}
+                  onPress={() => navigation.navigate("AddressList", { withCheckbox: true })}
                 >
                   <View style={styles.rowBetween}>
                     <Text style={[styles.text500, { color: Colors.secondary500 }]}>Shipping Address</Text>

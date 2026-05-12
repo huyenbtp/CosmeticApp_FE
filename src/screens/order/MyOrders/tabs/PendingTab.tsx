@@ -16,9 +16,8 @@ const mockOrders: IOrder[] = [
 ]
 
 export default function PendingTab() {
-  let data: IOrder[] = mockOrders;
 
   return (
-    <OrderList data={data} />
+    <OrderList status="pending" />
   );
 };

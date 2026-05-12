@@ -80,9 +80,8 @@ const mockOrders: IOrder[] = [
 ]
 
 export default function AllTab() {
-  let data: IOrder[] = mockOrders;
 
   return (
-    <OrderList data={data} />
+    <OrderList status="" />
   );
 };

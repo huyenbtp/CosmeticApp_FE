@@ -1,5 +1,8 @@
 import { IOrderItem } from "./orderItem";
 
+
+export type OrderStatusType = "" | "pending" | "confirmed" | "shipping" | "delivered" | "cancelled" | "returned";
+
 export interface IOrder {
   _id: string;
   order_code: string;
@@ -16,13 +19,12 @@ export interface IOrderDetail {
   items: IOrderItem[];
   total_items: number;
   subtotal: number;
-  discount_amount: number;
   total_estimated: number;
 
   payment_method: string;
   payment_status: string;
   order_status: string;
-  note: string;
+  notes: string;
 
   receiver_name: string;
   phone: string;
@@ -31,7 +33,7 @@ export interface IOrderDetail {
   district: string;
   city: string;
 
-  reveive_time: string;
+  reveive_time: string | null;
 
   createdAt: string;
   updatedAt: string;

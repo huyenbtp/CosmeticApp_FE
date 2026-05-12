@@ -13,6 +13,7 @@ import { useRecommendProducts } from "../../services/recommendation.service";
 import { useAddToWishlist, useRemoveFromWishlist } from "../../services/wishlist.service";
 import { useRecordProductViewHistory } from "../../services/viewHistory.service";
 import { useAddToCart } from "../../services/cart.service";
+import { useCheckoutStore } from "../../stores/checkout.store";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -82,6 +83,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
   const addToWishlistMutate = useAddToWishlist();
   const removeFromWishlistMutate = useRemoveFromWishlist();
   const addToCartMutation = useAddToCart();
+  const { setSelectedItems } = useCheckoutStore();
 
   useEffect(() => {
     //console.log(productDetail)
@@ -122,6 +124,19 @@ export default function ProductInformationScreen({ navigation, route }: any) {
   };
 
   const handleBuyNow = (quantity: number) => {
+    const orderItem = {
+      product_id,
+      product: {
+        _id: product_id,
+        name: productDetail.name,
+        image: productDetail.image || "",
+      },
+      unit_price: productDetail.selling_price,
+      quantity: quantity,
+    }
+
+    setSelectedItems([orderItem]); // lưu vào store
+    navigation.navigate("Checkout")
 
   };
 

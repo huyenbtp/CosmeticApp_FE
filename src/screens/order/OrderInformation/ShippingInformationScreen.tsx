@@ -4,6 +4,7 @@ import { Colors } from "../../../theme/colors";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../../../components/common/Header";
 import dayjs from "dayjs";
+import { useOrderStatusHistory } from "../../../services/order.service";
 
 const mockData: IOrderStatusHistory[] = [
   {
@@ -77,8 +78,10 @@ export const getStatusColor = (latest: boolean) => {
   return latest ? Colors.text : Colors.textLight;
 };
 
-export default function ShippingInformationScreen() {
-  const data = [...mockData].reverse(); // mới nhất lên trên
+export default function ShippingInformationScreen({ route }: any) {
+  const { order_id } = route.params;
+
+  const { data } = useOrderStatusHistory(order_id);
 
   const formatDate = (date: string) => {
     return dayjs(date).format("DD/MM HH:mm");
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 72
   },
-  
+
   time: {
     fontSize: 12,
     color: Colors.textSecondary,

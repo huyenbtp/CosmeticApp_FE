@@ -16,9 +16,8 @@ const mockOrders: IOrder[] = [
 ]
 
 export default function DeliveredTab() {
-  let data: IOrder[] = mockOrders;
 
   return (
-    <OrderList data={data} />
+    <OrderList status="delivered" />
   );
 };

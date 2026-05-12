@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, } from "react-native";
 import { Colors } from "../../../theme/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../../navigation/useAppNavigation";
 import Header from "../../../components/common/Header";
 import { IOrderDetail } from "../../../types/order";
 import ItemCard from "../../../components/order/OrderItemCard";
+import { useOrderDetail } from "../../../services/order.service";
 
 const mockData: IOrderDetail = {
   _id: "ORD-001",
@@ -43,12 +44,11 @@ const mockData: IOrderDetail = {
   ],
   total_items: 3,
   subtotal: 985000,
-  discount_amount: 98500,
   total_estimated: 876500,
   payment_method: "COD",
   payment_status: "paid",
   order_status: "delivered",
-  note: "",
+  notes: "",
 
   receiver_name: "Huyen Bui",
   phone: "0987654321",
@@ -83,8 +83,13 @@ const getOrderStatus = (status: string) => {
 export default function OrderInformationScreen({ navigation, route }: any) {
   const { order_id } = route.params;
 
-  const data = mockData;
+  const { data, isLoading } = useOrderDetail(order_id);
 
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
+      <ActivityIndicator size="small" />
+    </ View>
+  )
   return (
     <View style={styles.container}>
       <Header title="Order Information" />
@@ -120,7 +125,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
             <Text style={styles.sectionTitle}>Items List</Text>
 
             <View style={{ gap: 20 }}>
-              {data.items.map(item => (
+              {data.items.map((item: any) => (
                 <ItemCard key={item.product_id} item={item} />
               ))}
             </View>
@@ -135,6 +140,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
                 </Text>
               </View>
 
+              {/** 
               <View style={styles.rowBetween}>
                 <Text style={styles.text400}>
                   Discount
@@ -143,6 +149,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
                   -{data.discount_amount.toLocaleString()}₫
                 </Text>
               </View>
+              */}
 
               <View style={styles.rowBetween}>
                 <Text style={styles.text500}>
@@ -171,10 +178,12 @@ export default function OrderInformationScreen({ navigation, route }: any) {
               <Text style={styles.text400}>{new Date(data.createdAt).toLocaleString()}</Text>
             </View>
 
-            <View style={styles.rowBetween}>
-              <Text style={styles.text400}>Completion time</Text>
-              <Text style={styles.text400}>{new Date(data.reveive_time).toLocaleString()}</Text>
-            </View>
+            {data.receive_time && (
+              <View style={styles.rowBetween}>
+                <Text style={styles.text400}>Completion time</Text>
+                <Text style={styles.text400}>{new Date(data.reveive_time).toLocaleString()}</Text>
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>

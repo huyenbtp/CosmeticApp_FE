@@ -12,7 +12,7 @@ export default function ItemCard({ item, disabled = false }: { item: IOrderItem,
       onPress={() => navigation.navigate("ProductInformation", { product_id: item.product_id })}
       disabled={disabled}
     >
-      <Image source={{ uri: item.product.image }} style={styles.imagePlaceholder} />
+      <Image source={{ uri: item.product.image || undefined }} style={styles.imagePlaceholder} />
 
       <View style={styles.infoContainer}>
         <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>

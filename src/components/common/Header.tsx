@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
-import { useCart } from "../../providers/CartProvider";
+import { useCartCount } from "../../services/cart.service";
 
 export default function Header({
   title = "",
@@ -15,7 +15,7 @@ export default function Header({
   hasGoBack?: boolean
   hasCart?: boolean
 }) {
-  const { totalItems } = useCart();
+  const { data: totalItems = 0 } = useCartCount();
   const navigation = useAppNavigation();
 
   return (
@@ -47,7 +47,7 @@ export default function Header({
       <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
         {hasCart &&
           <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>
-            <Ionicons name="cart-outline" size={24} />
+            <Feather name="shopping-cart" size={24} />
 
             {totalItems > 0 && (
               <View style={styles.badge}>
@@ -95,18 +95,19 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: "absolute",
-    top: -4,
+    top: -6,
     right: -8,
     backgroundColor: Colors.bgError,
     borderRadius: 10,
-    paddingHorizontal: 5,
-    minWidth: 16,
+    paddingHorizontal: 4,
     alignItems: "center",
+    borderWidth: 3,
+    borderColor: Colors.background
   },
 
   badgeText: {
     color: "#fff",
-    fontSize: 10,
+    fontSize: 8,
     fontWeight: "600",
   },
 })

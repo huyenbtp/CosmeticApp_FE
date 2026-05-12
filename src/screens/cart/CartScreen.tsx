@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ActivityIndicator } from "react-native";
 import Checkbox from 'expo-checkbox';
 import { Colors } from "../../theme/colors";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { ICartItem } from "../../types/cartItem";
 import Header from "../../components/common/Header";
 import { IOrderItem } from "../../types/orderItem";
-import { useCart } from "../../providers/CartProvider";
+import { useCheckoutStore } from "../../stores/checkout.store";
+import { useCartItems, useDeleteCartItem, useUpdateCartItem } from "../../services/cart.service";
 
 const mockCartItem: ICartItem[] = [
   {
@@ -40,26 +41,20 @@ const mockCartItem: ICartItem[] = [
 
 export default function CartScreen() {
   const navigation = useAppNavigation();
-  const {
-    cart,
-    setCartFromServer,
-    selectedItems,
-    setSelectedItems,
-    increaseQty,
-    decreaseQty,
-    removeItem,
-  } = useCart();
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      const res = mockCartItem;
-      setCartFromServer(res); // 🔥 sync context
-    };
+  const { data: cart = [], isLoading } = useCartItems();
 
-    fetchCart();
-  }, []);
+  const updateQtyMutation = useUpdateCartItem();
+  const deleteMutation = useDeleteCartItem();
 
+  const { setSelectedItems } = useCheckoutStore();
   const [selectedItemID, setSelectedItemId] = useState<string[]>([]);
+
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
 
   const isAllSelected = cart.length === selectedItemID.length;
 
@@ -71,6 +66,10 @@ export default function CartScreen() {
   const handleSelectAll = (value: boolean) => {
     if (value) setSelectedItemId(cart.map((item) => item._id));
     else setSelectedItemId([])
+  }
+
+  const removeItem = (cartItemId: string) => {
+    deleteMutation.mutate(cartItemId);
   }
 
   // 🔹 tổng tiền
@@ -94,8 +93,8 @@ export default function CartScreen() {
       quantity: item.quantity,
     }))
 
-    setSelectedItems(orderItem); // 🔥 lưu vào context
-    navigation.navigate("Checkout", {})
+    setSelectedItems(orderItem); // lưu vào store
+    navigation.navigate("Checkout")
   }
 
   // 🔹 render item
@@ -113,7 +112,7 @@ export default function CartScreen() {
         style={styles.infoContainer}
         onPress={() => navigation.navigate("ProductInformation", { product_id: item.product_id })}
       >
-        <Image source={{ uri: item.product.image }} style={styles.imagePlaceholder} />
+        <Image source={{ uri: item.product.image || undefined }} style={styles.imagePlaceholder} />
 
         <View style={{ flex: 1, justifyContent: "space-between", }}>
           <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>
@@ -126,7 +125,10 @@ export default function CartScreen() {
               <View style={styles.qtyRow}>
                 <TouchableOpacity
                   style={styles.qtyBtn}
-                  onPress={() => decreaseQty(item._id)}
+                  onPress={() => updateQtyMutation.mutate({
+                    cartItemId: item._id,
+                    quantity: item.quantity - 1
+                  })}
                 >
                   <Text>-</Text>
                 </TouchableOpacity>
@@ -135,7 +137,10 @@ export default function CartScreen() {
 
                 <TouchableOpacity
                   style={styles.qtyBtn}
-                  onPress={() => increaseQty(item._id)}
+                  onPress={() => updateQtyMutation.mutate({
+                    cartItemId: item._id,
+                    quantity: item.quantity + 1
+                  })}
                 >
                   <Text>+</Text>
                 </TouchableOpacity>

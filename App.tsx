@@ -4,7 +4,6 @@ import AppNavigator, { RootStackParamList } from "./src/navigation/AppNavigator"
 import { NavigationContainer } from "@react-navigation/native";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { CartProvider } from "./src/providers/CartProvider";
 import { ToastProvider } from "./src/providers/ToastProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { refreshAccessToken, validateToken } from "./src/utils/authUtils";
@@ -61,11 +60,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <ToastProvider>
-          <CartProvider>
-            <NavigationContainer>
-              <AppNavigator initialRoute={initialRoute} />
-            </NavigationContainer>
-          </CartProvider>
+          <NavigationContainer>
+            <AppNavigator initialRoute={initialRoute} />
+          </NavigationContainer>
         </ToastProvider>
       </SafeAreaProvider>
     </QueryClientProvider>

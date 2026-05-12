@@ -31,7 +31,7 @@ export type RootStackParamList = {
   Cart: undefined
   CategoryProducts: { category_id: string }
   ChangePassword: undefined
-  Checkout: { address?: IUserAddress };
+  Checkout: undefined;
   EditProfile: undefined
   Filter: { currentFilter: IFilter, handleApply: (filter: IFilter) => void }
   Login: undefined

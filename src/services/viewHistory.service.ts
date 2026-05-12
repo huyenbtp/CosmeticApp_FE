@@ -1,5 +1,5 @@
 import { axiosInstance } from "./axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const getAllViewHistory = async () => {
   const res = await axiosInstance.get("/api/product-view-history");
@@ -22,7 +22,14 @@ const recordProductViewHistory = async (product_id: string) => {
 };
 
 export const useRecordProductViewHistory = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: recordProductViewHistory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["product-view-history"],
+      });
+    },
   });
 };

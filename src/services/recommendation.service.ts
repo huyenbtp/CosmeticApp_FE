@@ -27,7 +27,7 @@ const getNewProducts = async (limit: number) => {
 
 export const useNewProducts = (limit: number = 10) => {
   return useQuery({
-    queryKey: ["recommendations", limit],
+    queryKey: ["newest-products", limit],
     queryFn: () => getNewProducts(limit),
   });
 };

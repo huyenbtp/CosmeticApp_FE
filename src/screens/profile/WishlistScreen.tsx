@@ -3,7 +3,8 @@ import { Colors } from "../../theme/colors";
 import ProductCard from "../../components/product/ProductCard";
 import { useEffect, useState } from "react";
 import Header from "../../components/common/Header";
-import { useAddRemoveWishlist, useWishlistItems } from "../../services/wishlist.service";
+import { useRemoveFromWishlist, useWishlistItems } from "../../services/wishlist.service";
+import { useQueryClient } from "@tanstack/react-query";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 10;
@@ -11,21 +12,24 @@ const PADDING_HORIZONTAL = 14;
 const ITEM_WIDTH = (width - PADDING_HORIZONTAL * 2 - COLUMN_GAP) / 2;
 
 export default function WishlistScreen() {
+  const queryClient = useQueryClient();
 
-  const { data, isLoading, refetch } = useWishlistItems();
+  const { data, isLoading } = useWishlistItems();
 
   useEffect(() => {
 
   }, []);
 
-  const { mutate: remove } = useAddRemoveWishlist("remove");
+  const removeMutate = useRemoveFromWishlist();
 
   const handleUnlike = (product_id: string) => {
-    remove(
+    removeMutate.mutate(
       product_id,
       {
         onSuccess: () => {
-          refetch()
+          queryClient.invalidateQueries({
+            queryKey: ["wishlist-items"],
+          });
         }
       }
     );

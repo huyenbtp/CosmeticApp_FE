@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Colors } from "../../../theme/colors";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../../navigation/AppNavigator";
@@ -17,7 +17,7 @@ import Header from "../../../components/common/Header";
 import { Feather } from "@expo/vector-icons";
 import { IUserAddress } from "../../../types/userAddress";
 import PaymentMethodCard, { PaymentMethodType } from "../../../components/payment/PaymentMethodCard";
-import { useCart } from "../../../providers/CartProvider";
+import { useCheckoutStore } from "../../../stores/checkout.store";
 
 type RouteProps = RouteProp<RootStackParamList, "Checkout">;
 
@@ -36,12 +36,14 @@ const mockAddress = {
 export default function CheckoutScreen({ navigation }: any) {
   const route = useRoute<RouteProps>();
 
-  const { selectedItems } = useCart();
-
-  const { address } = route.params;
-  const selectedAddress: IUserAddress = address || mockAddress;
-  const [notes, setNotes] = useState("");
-  const [payment, setPayment] = useState("cod");
+  const {
+    selectedItems,
+    selectedAddress,
+    selectedPayment,
+    setSelectedPayment,
+    notes,
+    setNotes,
+  } = useCheckoutStore();
 
   const subtotal = selectedItems.reduce(
     (sum, item) => sum + item.unit_price * item.quantity,
@@ -61,7 +63,7 @@ export default function CheckoutScreen({ navigation }: any) {
       })),
       shipping_fee,
       discount_amount,
-      payment_method: payment,
+      payment_method: selectedPayment,
       address: selectedAddress,
       notes,
     };
@@ -69,6 +71,13 @@ export default function CheckoutScreen({ navigation }: any) {
     //navigation.replace("OrderSuccessfully");
   };
 
+  useEffect(() => {
+    if (!selectedAddress) {
+      navigation.navigate("AddressList", { withCheckbox: true })
+    }
+  }, []);
+
+  if (!selectedAddress || !selectedItems) return;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -157,8 +166,8 @@ export default function CheckoutScreen({ navigation }: any) {
                     <PaymentMethodCard
                       key={index}
                       item={item as PaymentMethodType}
-                      isActive={item === payment}
-                      onSelect={setPayment}
+                      isActive={item === selectedPayment}
+                      onSelect={setSelectedPayment}
                     />
                   ))}
                 </View>

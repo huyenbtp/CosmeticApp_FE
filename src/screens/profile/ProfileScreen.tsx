@@ -2,14 +2,14 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "rea
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
-import { useCart } from "../../providers/CartProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AlertDialog from "../../components/common/AlertDialog";
 import { useState } from "react";
+import { useCartCount } from "../../services/cart.service";
 
 export default function ProfileScreen() {
   const navigation = useAppNavigation();
-  const { totalItems } = useCart();
+  const { data: totalItems = 0 } = useCartCount();
   const [alertVisible, setAlertVisible] = useState(false);
 
   const username = "ikikasumi";   //fake

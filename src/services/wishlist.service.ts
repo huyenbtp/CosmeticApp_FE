@@ -21,14 +21,20 @@ const addToWishlist = async (product_id: string) => {
   return res.data;
 };
 
+export const useAddToWishlist = () => {
+  return useMutation({
+    mutationFn: addToWishlist,
+  });
+};
+
 const removeFromWishlist = async (product_id: string) => {
   const res = await axiosInstance.delete(`api/wishlist-items/${product_id}`);
 
   return res.data;
 };
 
-export const useAddRemoveWishlist = (type: "add" | "remove") => {
+export const useRemoveFromWishlist = () => {
   return useMutation({
-    mutationFn: type === "add" ? addToWishlist : removeFromWishlist,
+    mutationFn: removeFromWishlist,
   });
 };

@@ -4,6 +4,7 @@ import { Feather, Fontisto, Ionicons } from "@expo/vector-icons";
 import Header from "../../components/common/Header";
 import { IUserAddress } from "../../types/userAddress";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
+import { useCheckoutStore } from "../../stores/checkout.store";
 
 const mockAddresses: IUserAddress[] = [
   {
@@ -32,8 +33,10 @@ const mockAddresses: IUserAddress[] = [
 
 export default function AddressListScreen({ route }: any) {
   const navigation = useAppNavigation()
-  const { withCheckbox, selectedAddressId } = route.params;
+  const { withCheckbox } = route.params;
   const data = mockAddresses;
+
+  const { selectedAddress, setSelectedAddress } = useCheckoutStore();
 
   return (
     <View style={styles.container}>
@@ -46,9 +49,10 @@ export default function AddressListScreen({ route }: any) {
           <View style={styles.item} key={item._id}>
             {withCheckbox && (
               <TouchableOpacity onPress={() => {
-                navigation.popTo("Checkout", { address: item })
+                navigation.popTo("Checkout")
+                setSelectedAddress(item)
               }}>
-                {selectedAddressId === item._id
+                {selectedAddress._id === item._id
                   ? <Fontisto name="radio-btn-active" size={20} color={Colors.secondary} />
                   : <Fontisto name="radio-btn-passive" size={20} color={Colors.textPlaceholder} />
                 }

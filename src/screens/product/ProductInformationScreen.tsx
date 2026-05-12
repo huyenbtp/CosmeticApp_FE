@@ -10,8 +10,9 @@ import ProductActionModal from "../../components/product/ProductActionModal";
 import { useEffect, useState } from "react";
 import { useProductDetail } from "../../services/product.service";
 import { useRecommendProducts } from "../../services/recommendation.service";
-import { useAddRemoveWishlist } from "../../services/wishlist.service";
+import { useAddToWishlist, useRemoveFromWishlist } from "../../services/wishlist.service";
 import { useRecordProductViewHistory } from "../../services/viewHistory.service";
+import { useAddToCart } from "../../services/cart.service";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -76,11 +77,11 @@ export default function ProductInformationScreen({ navigation, route }: any) {
   const [type, setType] = useState<"add_to_cart" | "buy">("add_to_cart");
   const [showModal, setShowModal] = useState(false);
 
-  const { mutate: recordView } = useRecordProductViewHistory();
+  const recordViewMutate = useRecordProductViewHistory();
   const [isOnWishlist, setIsOnWishlist] = useState(false);
-  const {
-    mutate: addRemoveWishlist,
-  } = useAddRemoveWishlist(isOnWishlist ? "remove" : "add");
+  const addToWishlistMutate = useAddToWishlist();
+  const removeFromWishlistMutate = useRemoveFromWishlist();
+  const addToCartMutation = useAddToCart();
 
   useEffect(() => {
     //console.log(productDetail)
@@ -91,23 +92,35 @@ export default function ProductInformationScreen({ navigation, route }: any) {
   }, [productDetail]);
 
   useEffect(() => {
-    if (viewed == 1) recordView(product_id);
+    if (viewed == 1) recordViewMutate.mutate(product_id);
   }, [viewed]);
 
   const handleAddRemoveWishlist = () => {
-    addRemoveWishlist(
-      product_id,
-      {
-        onSuccess: async () => {
-          setIsOnWishlist(!isOnWishlist)
+    if (isOnWishlist) {
+      removeFromWishlistMutate.mutate(
+        product_id,
+        {
+          onSuccess: async () => {
+            setIsOnWishlist(!isOnWishlist)
+          }
         }
-      }
-    )
+      )
+    } else {
+      addToWishlistMutate.mutate(
+        product_id,
+        {
+          onSuccess: async () => {
+            setIsOnWishlist(!isOnWishlist)
+          }
+        }
+      )
+    }
   };
 
   const handleAddToCart = (quantity: number) => {
-
+    addToCartMutation.mutate({ product_id, quantity })
   };
+
   const handleBuyNow = (quantity: number) => {
 
   };

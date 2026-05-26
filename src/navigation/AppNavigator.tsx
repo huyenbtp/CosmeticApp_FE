@@ -25,6 +25,7 @@ import RegisterScreen from "../screens/auth/RegisterScreen";
 import ProductViewHistoryScreen from "../screens/profile/ViewHistoryScreen";
 import WishlistScreen from "../screens/profile/WishlistScreen";
 import ProductDescriptionScreen from "../screens/product/ProductDescriptionScreen";
+import OrderSuccess from "../screens/order/Checkout/OrderSuccess";
 
 export type RootStackParamList = {
   AddressList: { withCheckbox?: boolean }
@@ -41,6 +42,7 @@ export type RootStackParamList = {
   MyOrders: { initialRoute: string }
   Onboarding: undefined
   OrderInformation: { order_id: string }
+  OrderSuccess: { order_id: string }
   ProductDescription: { data: any }
   ProductInformation: { product_id: string }
   ProfileInformation: undefined
@@ -84,6 +86,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="OrderInformation" component={OrderInformationScreen} />
+      <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
       <Stack.Screen name="ShippingInformation" component={ShippingInformationScreen} />
       <Stack.Screen name="ProductDescription" component={ProductDescriptionScreen} />
       <Stack.Screen name="ProductInformation" component={ProductInformationScreen} />

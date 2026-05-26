@@ -5,7 +5,10 @@ import { useAppNavigation } from "../../../navigation/useAppNavigation";
 import Header from "../../../components/common/Header";
 import { IOrderDetail } from "../../../types/order";
 import ItemCard from "../../../components/order/OrderItemCard";
-import { useOrderDetail } from "../../../services/order.service";
+import { useCancelOrder, useOrderDetail } from "../../../services/order.service";
+import { useState } from "react";
+import AlertDialog from "../../../components/common/AlertDialog";
+import { useToast } from "../../../providers/ToastProvider";
 
 const mockData: IOrderDetail = {
   _id: "ORD-001",
@@ -83,7 +86,27 @@ const getOrderStatus = (status: string) => {
 export default function OrderInformationScreen({ navigation, route }: any) {
   const { order_id } = route.params;
 
-  const { data, isLoading } = useOrderDetail(order_id);
+  const { showMessage } = useToast();
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertType, setAlertType] = useState<"cancel">("cancel");
+  const { data, isLoading, refetch } = useOrderDetail(order_id);
+  const { mutate: cancelOrder, isPending } = useCancelOrder();
+
+  const handleCancelOrder = () => {
+    cancelOrder(
+      { order_id, reason: "" },
+      {
+        onSuccess: () => {
+          showMessage("The order has been successfully canceled")
+          refetch()
+        },
+        onError: (error: any) => {
+          showMessage(error.response?.data.message, "error")
+        },
+      }
+    )
+    setAlertVisible(false);
+  };
 
   if (isLoading) return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
@@ -100,13 +123,15 @@ export default function OrderInformationScreen({ navigation, route }: any) {
           </View>
 
           <View style={styles.section}>
-            <TouchableOpacity
-              style={[styles.rowBetween, styles.divider]}
-              onPress={() => navigation.navigate("ShippingInformation", { order_id: order_id })}
-            >
-              <Text style={styles.text600}>Shipping Information</Text>
-              <Feather name="chevron-right" size={20} color={Colors.textLight} />
-            </TouchableOpacity>
+            {data.order_status !== "pending" && (
+              <TouchableOpacity
+                style={[styles.rowBetween, styles.divider]}
+                onPress={() => navigation.navigate("ShippingInformation", { order_id: order_id })}
+              >
+                <Text style={styles.text600}>Shipping Information</Text>
+                <Feather name="chevron-right" size={20} color={Colors.textLight} />
+              </TouchableOpacity>
+            )}
 
             <View style={styles.row}>
               <Feather name="map-pin" size={16} />
@@ -196,10 +221,12 @@ export default function OrderInformationScreen({ navigation, route }: any) {
                 <TouchableOpacity
                   style={[styles.button, { backgroundColor: Colors.bgError }]}
                   onPress={() => {
-
+                    setAlertVisible(true)
+                    setAlertType("cancel")
                   }}
+                  disabled={isPending}
                 >
-                  <Text style={[styles.buttonText, { color: Colors.textError }]}>Cancel</Text>
+                  <Text style={[styles.buttonText, { color: Colors.textError, fontWeight: 500, }]}>Cancel</Text>
                 </TouchableOpacity>
               </>
             ) : data.order_status === "delivered" && (
@@ -226,6 +253,15 @@ export default function OrderInformationScreen({ navigation, route }: any) {
             )}
         </View>
       )}
+
+      <AlertDialog
+        visible={alertVisible}
+        message={alertType === "cancel" ? "Are you sure you want to cancel this order?" : ""}
+        onCancel={() => setAlertVisible(false)}
+        onConfirm={() => {
+          if (alertType === "cancel") handleCancelOrder()
+        }}
+      />
     </View>
   );
 }

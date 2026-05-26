@@ -58,7 +58,7 @@ export default function ProductActionModal({
               {/* Product */}
               <View style={styles.productRow}>
                 <Image
-                  source={{ uri: product.image }}
+                  source={{ uri: product.image || undefined }}
                   style={styles.image}
                 />
 
@@ -67,7 +67,7 @@ export default function ProductActionModal({
                     {product.selling_price.toLocaleString()}₫
                   </Text>
                   <Text numberOfLines={2} style={styles.stock}>
-                    Stock: {product.stock_quantity}
+                    Stock: {product.available_stock}
                   </Text>
                 </View>
               </View>

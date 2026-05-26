@@ -10,7 +10,7 @@ import { IOrderItem } from "../../types/orderItem";
 import { useCheckoutStore } from "../../stores/checkout.store";
 import { useCartItems, useDeleteCartItem, useUpdateCartItem } from "../../services/cart.service";
 
-const mockCartItem: ICartItem[] = [
+const mockCartItem = [
   {
     _id: "1",
     product_id: "1",
@@ -47,8 +47,11 @@ export default function CartScreen() {
   const updateQtyMutation = useUpdateCartItem();
   const deleteMutation = useDeleteCartItem();
 
-  const { setSelectedItems } = useCheckoutStore();
+  const { setSelectedItems, setSelectedCartItemIds } = useCheckoutStore();
   const [selectedItemID, setSelectedItemId] = useState<string[]>([]);
+  const availableItem = cart.filter((item) =>
+    item.product.available_stock > 0 && item.product.status === "published"
+  );
 
   if (isLoading) return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -64,7 +67,7 @@ export default function CartScreen() {
   };
 
   const handleSelectAll = (value: boolean) => {
-    if (value) setSelectedItemId(cart.map((item) => item._id));
+    if (value) setSelectedItemId(availableItem.map((item) => item._id));
     else setSelectedItemId([])
   }
 
@@ -93,69 +96,91 @@ export default function CartScreen() {
       quantity: item.quantity,
     }))
 
+    setSelectedCartItemIds(selectedItemID);
     setSelectedItems(orderItem); // lưu vào store
     navigation.navigate("Checkout")
   }
 
   // 🔹 render item
-  const renderItem = ({ item }: { item: ICartItem }) => (
-    <View style={styles.item}>
-      <View style={{ width: "auto" }}>
-        <Checkbox
-          value={selectedItemID.includes(item._id)}
-          onValueChange={(value) => toggleSelect(item._id, value)}
-          style={{ borderRadius: 5 }}
-          color={Colors.primary500}
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.infoContainer}
-        onPress={() => navigation.navigate("ProductInformation", { product_id: item.product_id })}
-      >
-        <Image source={{ uri: item.product.image || undefined }} style={styles.imagePlaceholder} />
+  const renderItem = ({ item }: { item: ICartItem }) => {
+    const isPublished = item.product.status === "published";
+    const inStock = item.product.available_stock > 0;
 
-        <View style={{ flex: 1, justifyContent: "space-between", }}>
-          <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>
+    return (
+      <View style={styles.item}>
+        {inStock && isPublished && (
+          <View style={{ width: "auto" }}>
+            <Checkbox
+              value={selectedItemID.includes(item._id)}
+              onValueChange={(value) => toggleSelect(item._id, value)}
+              style={{ borderRadius: 5 }}
+              color={Colors.primary500}
+              disabled={!inStock || !isPublished}
+            />
+          </View>
+        )}
 
-          <View style={styles.row}>
-            <Text style={styles.price}>{(item.product.price).toLocaleString()}₫</Text>
+        <TouchableOpacity
+          style={styles.infoContainer}
+          onPress={() => navigation.navigate("ProductInformation", { product_id: item.product_id })}
+        >
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: item.product.image || undefined }} style={styles.imagePlaceholder} />
+            {!isPublished ? (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>Does not exist</Text>
+              </View>
+            ) : !inStock && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>Out of stock</Text>
+              </View>
+            )}
+          </View>
+
+          <View style={{ flex: 1, justifyContent: "space-between", }}>
+            <Text numberOfLines={2} style={styles.name}>{item.product.name}</Text>
 
             <View style={styles.row}>
-              {/* Quantity */}
-              <View style={styles.qtyRow}>
-                <TouchableOpacity
-                  style={styles.qtyBtn}
-                  onPress={() => updateQtyMutation.mutate({
-                    cartItemId: item._id,
-                    quantity: item.quantity - 1
-                  })}
-                >
-                  <Text>-</Text>
-                </TouchableOpacity>
+              <Text style={styles.price}>{(item.product.price).toLocaleString()}₫</Text>
+              {inStock && (
+                <View style={styles.row}>
+                  {/* Quantity */}
+                  <View style={styles.qtyRow}>
+                    <TouchableOpacity
+                      style={styles.qtyBtn}
+                      onPress={() => updateQtyMutation.mutate({
+                        cartItemId: item._id,
+                        quantity: item.quantity - 1
+                      })}
+                    >
+                      <Text>-</Text>
+                    </TouchableOpacity>
 
-                <Text style={styles.qty}>{item.quantity}</Text>
+                    <Text style={styles.qty}>{item.quantity}</Text>
 
-                <TouchableOpacity
-                  style={styles.qtyBtn}
-                  onPress={() => updateQtyMutation.mutate({
-                    cartItemId: item._id,
-                    quantity: item.quantity + 1
-                  })}
-                >
-                  <Text>+</Text>
-                </TouchableOpacity>
-              </View>
+                    <TouchableOpacity
+                      style={styles.qtyBtn}
+                      onPress={() => updateQtyMutation.mutate({
+                        cartItemId: item._id,
+                        quantity: item.quantity + 1
+                      })}
+                    >
+                      <Text>+</Text>
+                    </TouchableOpacity>
+                  </View>
 
-              {/* Remove */}
-              <TouchableOpacity style={{}} onPress={() => removeItem(item._id)}>
-                <Feather name="trash-2" size={16} color={Colors.textPlaceholder} />
-              </TouchableOpacity>
+                  {/* Remove */}
+                  <TouchableOpacity style={{}} onPress={() => removeItem(item._id)}>
+                    <Feather name="trash-2" size={16} color={Colors.textPlaceholder} />
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+        </TouchableOpacity>
+      </View>
+    )
+  };
 
   return (
     <View style={styles.container}>
@@ -224,12 +249,29 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
+  imageContainer: {
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
   imagePlaceholder: {
     width: 90,
     height: 90,
     backgroundColor: "#eee",
-    borderRadius: 8,
   },
+  badge: {
+    width: "100%",
+    backgroundColor: Colors.bgOverlay,
+    position: "absolute",
+    bottom: 0,
+    paddingVertical: 3,
+  },
+  badgeText: {
+    color: Colors.textInverse,
+    fontSize: 9,
+    fontWeight: 500,
+    textAlign: "center",
+  },
+
   name: {
     fontSize: 12,
     fontWeight: "500",

@@ -6,6 +6,8 @@ export interface ICartItem {
     name: string;
     price: number;
     image?: string;
+    status: string;
+    available_stock: number;
   }
   quantity: number;
   createdAt: string;

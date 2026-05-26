@@ -44,6 +44,8 @@ export const getOrderStatus = (status: string) => {
       return "The order has been placed"
     case "confirmed":
       return "The order has been confirmed"
+    case "packed":
+      return "The order has been packed"
     case "shipping":
       return "The order is being shipped"
     case "delivered":

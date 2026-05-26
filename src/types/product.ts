@@ -22,7 +22,7 @@ export interface IProductDetail {
   selling_price: number;
   description: string;
   image: string;
-  stock_quantity: number;
+  available_stock: number;
   totalSold: number;
   status: string;
   avg_rating: number;

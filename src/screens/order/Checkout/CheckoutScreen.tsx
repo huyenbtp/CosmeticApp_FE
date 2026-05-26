@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Colors } from "../../../theme/colors";
@@ -19,6 +20,9 @@ import { IUserAddress } from "../../../types/userAddress";
 import PaymentMethodCard, { PaymentMethodType } from "../../../components/payment/PaymentMethodCard";
 import { useCheckoutStore } from "../../../stores/checkout.store";
 import { useDefaultUserAddresses } from "../../../services/userAddress.service";
+import { useCreateOrder } from "../../../services/order.service";
+import { useToast } from "../../../providers/ToastProvider";
+import AlertDialog from "../../../components/common/AlertDialog";
 
 type RouteProps = RouteProp<RootStackParamList, "Checkout">;
 
@@ -36,9 +40,13 @@ const mockAddress = {
 
 export default function CheckoutScreen({ navigation }: any) {
   const route = useRoute<RouteProps>();
+  const { mutate: createOrder, isPending } = useCreateOrder();
+  const { showMessage } = useToast();
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const {
     selectedItems,
+    selectedCartItemIds,
     selectedAddress,
     setSelectedAddress,
     selectedPayment,
@@ -63,25 +71,50 @@ export default function CheckoutScreen({ navigation }: any) {
         quantity: item.quantity,
         unit_price: item.unit_price,
       })),
+      cartItemIds: selectedCartItemIds,
       shipping_fee,
-      discount_amount,
       payment_method: selectedPayment,
-      address: selectedAddress,
       notes,
+      receiver_name: selectedAddress.receiver_name,
+      phone: selectedAddress.phone,
+      address_line: selectedAddress.address_line,
+      ward: selectedAddress.ward,
+      district: selectedAddress.district,
+      city: selectedAddress.city,
     };
 
-    //navigation.replace("OrderSuccessfully");
+    createOrder(
+      payload,
+      {
+        onSuccess: (data) => {
+          navigation.replace("OrderSuccess", {
+            order_id: data._id
+          });
+        },
+        onError: (error: any) => {
+          showMessage(error.response?.data.message, "error");
+          setAlertVisible(false)
+        }
+      }
+    )
   };
 
-  const { data: defaultUserAddress } = useDefaultUserAddresses();
+  const { data: defaultUserAddress, isLoading } = useDefaultUserAddresses();
 
   useEffect(() => {
+    if (isLoading) return;
+
     setSelectedPayment("cod")
     setNotes("")
     if (defaultUserAddress) setSelectedAddress(defaultUserAddress)
     else navigation.navigate("AddressList", { withCheckbox: true })
-  }, []);
+  }, [isLoading]);
 
+  if (isLoading || isPending) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
+      <ActivityIndicator size="small" />
+    </ View>
+  )
   if (!selectedAddress || !selectedItems) return;
   return (
     <KeyboardAvoidingView
@@ -232,11 +265,18 @@ export default function CheckoutScreen({ navigation }: any) {
               {total_estimated.toLocaleString()}₫
             </Text>
           </View>
-          <TouchableOpacity style={styles.orderBtn} onPress={handlePlaceOrder}>
+          <TouchableOpacity style={styles.orderBtn} onPress={() => setAlertVisible(true)} disabled={isPending}>
             <Text style={styles.orderText}>Place Order</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      <AlertDialog
+        visible={alertVisible}
+        message="Confirm you want to place an order?"
+        onCancel={() => setAlertVisible(false)}
+        onConfirm={handlePlaceOrder}
+      />
     </KeyboardAvoidingView>
   );
 }

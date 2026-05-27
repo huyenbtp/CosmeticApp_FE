@@ -146,7 +146,7 @@ export default function BrandScreen() {
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.item}
-          onPress={() => { navigation.navigate("BrandProducts", { brand_id: item._id }) }}
+          onPress={() => { navigation.navigate("BrandProducts", { brand_id: item._id, brand_name: item.name }) }}
         >
           <Text style={styles.name}>{item.name}</Text>
           {item.logo &&

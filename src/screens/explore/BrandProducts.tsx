@@ -1,13 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import ProductCard from "../../components/product/ProductCard";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
-import { mockRecommendProducts } from "../home/HomeScreen";
 import { useEffect, useState } from "react";
 import { NullFilter } from "./FilterScreen";
 import SortModal, { SortType } from "../../components/common/SortModal";
 import Header from "../../components/common/Header";
+import { useProductFilters, useProducts } from "../../services/product.service";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -21,18 +21,44 @@ const mockBrand = {
   status: "active",
 };
 
-export default function BrandProductsScreen() {
+export default function BrandProductsScreen({ route }: any) {
+  const { brand_id, brand_name } = route.params;
   const navigation = useAppNavigation();
   const [openSort, setOpenSort] = useState(false);
 
   const [sortBy, setSortBy] = useState<SortType>("none");
   const [filter, setFilter] = useState(NullFilter);
 
-  const brand = mockBrand;
-  const products = mockRecommendProducts;
+  const {
+    data: initialFilter
+  } = useProductFilters({ brand_id });
+
+  const {
+    data,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProducts(
+    {
+      brand_id,
+      ...filter
+    },
+    { enabled: !!initialFilter }
+  );
 
   useEffect(() => {
-    console.log("filter: " + filter.minPrice + ", " + filter.maxPrice)
+    if (!initialFilter) return;
+    setFilter(prev => ({
+      ...prev,
+      minPrice: initialFilter.minPrice,
+      maxPrice: initialFilter.maxPrice,
+    }))
+  }, [initialFilter]);
+
+  useEffect(() => {
+    refetch()
+    console.log("filter: " + filter.minPrice + ", " + filter.tags)
   }, [filter]);
 
   const isFilterApply =
@@ -43,7 +69,7 @@ export default function BrandProductsScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title={brand.name} hasCart />
+      <Header title={brand_name} hasCart />
 
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -56,6 +82,7 @@ export default function BrandProductsScreen() {
         <TouchableOpacity
           style={styles.filterButton}
           onPress={() => navigation.navigate("Filter", {
+            initialFilter,
             currentFilter: filter,
             handleApply: setFilter
           })}
@@ -66,7 +93,7 @@ export default function BrandProductsScreen() {
       </View>
 
       <FlatList
-        data={products}
+        data={data?.pages.flatMap(page => page.results)}
         keyExtractor={(item) => item._id}
         numColumns={2}
         renderItem={({ item }) => (
@@ -77,6 +104,19 @@ export default function BrandProductsScreen() {
         contentContainerStyle={styles.productsContainer}
         columnWrapperStyle={styles.productsRow}
         showsVerticalScrollIndicator={false}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() => {
+          if (isFetchingNextPage) return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
+              <ActivityIndicator size="small" />
+            </ View>
+          )
+        }}
       />
 
       <SortModal visible={openSort} onClose={() => setOpenSort(false)} sortType={sortBy} onChangeType={setSortBy} />

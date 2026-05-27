@@ -74,7 +74,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
   const [viewed, setViewed] = useState(0);
 
   const { data: productDetail, isLoading } = useProductDetail(product_id);
-  const { data: recommendProducts } = useRecommendProducts(10);
+  const { data: recommendProducts, refetch: refetchRecommend, } = useRecommendProducts(10);
   const [type, setType] = useState<"add_to_cart" | "buy">("add_to_cart");
   const [showModal, setShowModal] = useState(false);
 
@@ -94,7 +94,10 @@ export default function ProductInformationScreen({ navigation, route }: any) {
   }, [productDetail]);
 
   useEffect(() => {
-    if (viewed == 1) recordViewMutate.mutate(product_id);
+    if (viewed == 1) {
+      recordViewMutate.mutate(product_id);
+      refetchRecommend()
+    }
   }, [viewed]);
 
   const handleAddRemoveWishlist = () => {
@@ -249,7 +252,7 @@ export default function ProductInformationScreen({ navigation, route }: any) {
                   alignItems: "center",
                   gap: 8,
                 }}
-                onPress={() => navigation.navigate("BrandProducts", { brand_id: productDetail.brand._id })}
+                onPress={() => navigation.navigate("BrandProducts", { brand_id: productDetail.brand._id, brand_name: productDetail.brand.name })}
               >
                 <Text style={{ color: Colors.textSecondary, fontSize: 12, }}>View more</Text>
                 <Ionicons name="chevron-forward-outline" size={14} />

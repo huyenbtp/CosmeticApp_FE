@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, ActivityIndicator } from "react-native";
 import { Colors } from "../../theme/colors";
 import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
@@ -6,13 +6,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import AlertDialog from "../../components/common/AlertDialog";
 import { useState } from "react";
 import { useCartCount } from "../../services/cart.service";
+import { useMe } from "../../services/auth.service";
 
 export default function ProfileScreen() {
   const navigation = useAppNavigation();
   const { data: totalItems = 0 } = useCartCount();
   const [alertVisible, setAlertVisible] = useState(false);
 
-  const username = "ikikasumi";   //fake
+  const { data: user, isLoading } = useMe();
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem("access_token");
@@ -22,11 +23,16 @@ export default function ProfileScreen() {
     navigation.replace("Login");
   };
 
-  return (
+  if (isLoading) return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+  if (user) return (
     <View style={styles.container}>
       {/** Header*/}
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>{username}</Text>
+        <Text style={styles.headerTitle}>{user.email}</Text>
         <TouchableOpacity style={{}} onPress={() => navigation.navigate("Cart")}>
           <Ionicons name="cart-outline" size={24} />
           {totalItems > 0 && (
@@ -176,8 +182,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: 700,
+    fontSize: 15,
+    fontWeight: 500,
     color: Colors.text,
   },
   badge: {

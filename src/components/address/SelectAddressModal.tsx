@@ -65,6 +65,7 @@ export default function SelectAddressModal({
                         onPress={() => {
                           onSelect(item)
                           onClose()
+                          setSearchKey("")
                         }}
                       >
                         <Text >

@@ -137,9 +137,11 @@ function transformToUI(data: ICategory[]): ICategoryUI[] {
   return tree.map((root) => ({
     _id: root._id,
     name: root.name,
+    slug: root.slug,
     sections: root.children.map((parent: any) => ({
       _id: parent._id,
       title: parent.name,
+      slug: parent.slug,
       items: parent.children,
     })),
   }));
@@ -216,7 +218,7 @@ export default function CategoryScreen() {
 
                 <TouchableOpacity
                   style={styles.viewAllButton}
-                  onPress={() => navigation.navigate("CategoryProducts", { category_id: item._id })}
+                  onPress={() => navigation.navigate("CategoryProducts", { category_slug: item.slug, category_name: item.title })}
                 >
                   <Text style={styles.viewAllText}>View all</Text>
                   <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
@@ -229,7 +231,7 @@ export default function CategoryScreen() {
                   <TouchableOpacity
                     key={i}
                     style={styles.item}
-                    onPress={() => navigation.navigate("CategoryProducts", { category_id: sub._id })}
+                    onPress={() => navigation.navigate("CategoryProducts", { category_slug: sub.slug, category_name: sub.name })}
                   >
                     <Text style={styles.itemText}>{sub.name}</Text>
                   </TouchableOpacity>
@@ -237,6 +239,17 @@ export default function CategoryScreen() {
               </View>
             </View>
           )}
+          ListHeaderComponent={
+            <TouchableOpacity 
+            style={styles.selectedCategory}
+            onPress={() => navigation.navigate("CategoryProducts", { category_slug: selectedCategory.slug, category_name: selectedCategory.name })}
+            >
+              <Text style={styles.selectedCategoryName}>
+                View All {selectedCategory.name}
+              </Text>
+                  <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
+            </TouchableOpacity>
+          }
         />
       )}
     </View>
@@ -272,6 +285,18 @@ const styles = StyleSheet.create({
   right: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+
+  selectedCategory: {
+    flexDirection: "row",
+    paddingVertical: 18,
+    backgroundColor: Colors.primary50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectedCategoryName: {
+    fontSize: 14,
+    fontWeight: 500,
   },
 
   section: {

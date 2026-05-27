@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, } from "react-native";
 import { Colors } from "../../theme/colors";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import ProductCard from "../../components/product/ProductCard";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { NullFilter } from "./FilterScreen";
 import SortModal, { SortType } from "../../components/common/SortModal";
 import Header from "../../components/common/Header";
+import { useProductFilters, useProducts } from "../../services/product.service";
 
 const { width } = Dimensions.get("window");
 const COLUMN_GAP = 12;
@@ -19,18 +20,44 @@ const mockCategory = {
   name: "Cleanser",
 };
 
-export default function CategoryProductsScreen() {
+export default function CategoryProductsScreen({ route }: any) {
+  const { category_slug, category_name } = route.params;
   const navigation = useAppNavigation();
   const [openSort, setOpenSort] = useState(false);
 
   const [sortBy, setSortBy] = useState<SortType>("none");
   const [filter, setFilter] = useState(NullFilter);
 
-  const category = mockCategory;
-  const products = mockRecommendProducts;
+  const {
+    data: initialFilter
+  } = useProductFilters({ category_slug });
+
+  const {
+    data,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProducts(
+    {
+      category_slug,
+      ...filter
+    },
+    { enabled: !!initialFilter }
+  );
 
   useEffect(() => {
-    console.log("filter: " + filter.minPrice + ", " + filter.maxPrice)
+    if (!initialFilter) return;
+    setFilter(prev => ({
+      ...prev,
+      minPrice: initialFilter.minPrice,
+      maxPrice: initialFilter.maxPrice,
+    }))
+  }, [initialFilter]);
+
+  useEffect(() => {
+    refetch()
+    //console.log("filter: " + filter.minPrice + ", " + filter.maxPrice)
   }, [filter]);
 
   const isFilterApply =
@@ -41,7 +68,7 @@ export default function CategoryProductsScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title={category.name} hasCart />
+      <Header title={category_name} hasCart />
 
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -54,6 +81,7 @@ export default function CategoryProductsScreen() {
         <TouchableOpacity
           style={styles.filterButton}
           onPress={() => navigation.navigate("Filter", {
+            initialFilter,
             currentFilter: filter,
             handleApply: setFilter
           })}
@@ -64,7 +92,7 @@ export default function CategoryProductsScreen() {
       </View>
 
       <FlatList
-        data={products}
+        data={data?.pages.flatMap(page => page.results)}
         keyExtractor={(item) => item._id}
         numColumns={2}
         renderItem={({ item }) => (
@@ -75,6 +103,19 @@ export default function CategoryProductsScreen() {
         contentContainerStyle={styles.productsContainer}
         columnWrapperStyle={styles.productsRow}
         showsVerticalScrollIndicator={false}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() => {
+          if (isFetchingNextPage) return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
+              <ActivityIndicator size="small" />
+            </ View>
+          )
+        }}
       />
 
       <SortModal visible={openSort} onClose={() => setOpenSort(false)} sortType={sortBy} onChangeType={setSortBy} />

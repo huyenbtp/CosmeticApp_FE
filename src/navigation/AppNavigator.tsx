@@ -29,14 +29,14 @@ import OrderSuccess from "../screens/order/Checkout/OrderSuccess";
 
 export type RootStackParamList = {
   AddressList: { withCheckbox?: boolean }
-  BrandProducts: { brand_id: string }
+  BrandProducts: { brand_id: string, brand_name: string }
   Cart: undefined
-  CategoryProducts: { category_id: string }
+  CategoryProducts: { category_slug: string, category_name: string }
   ChangePassword: undefined
   Checkout: undefined
   CreateEditAddress: {mode: "create" | "edit", editingAddress?: any}
   EditProfile: undefined
-  Filter: { currentFilter: IFilter, handleApply: (filter: IFilter) => void }
+  Filter: { initialFilter: IFilter, currentFilter: IFilter, handleApply: (filter: IFilter) => void }
   Login: undefined
   Main: undefined
   MyOrders: { initialRoute: string }

@@ -83,13 +83,17 @@ const Rail = () => <View style={styles.rail} />;
 const RailSelected = () => <View style={styles.railSelected} />;
 
 export default function FilterScreen({ navigation, route }: any) {
-  const { currentFilter, handleApply } = route.params;
+  const { 
+    initialFilter, 
+    currentFilter, 
+    handleApply 
+  } = route.params;
 
-  const [min, setMin] = useState(currentFilter.minPrice ?? 0);
+  const [min, setMin] = useState(0);
   const [max, setMax] = useState(currentFilter.maxPrice ?? 0);
 
-  const [skinTypes, setSkinTypes] = useState<ISkinType[]>([]);
-  const [tags, setTags] = useState<ITag[]>([]);
+  const [selectedSkinTypes, setSelectedSkinTypes] = useState<ISkinType[]>(currentFilter.skinTypes ?? []);
+  const [selectedTags, setSelectedTags] = useState<ITag[]>(currentFilter.tags ?? []);
 
   return (
     <View style={styles.container}>
@@ -104,8 +108,8 @@ export default function FilterScreen({ navigation, route }: any) {
 
           <RangeSlider
             min={0}
-            max={2000000}
-            step={50000}
+            max={initialFilter.maxPrice}
+            step={10000}
             low={Math.min(min, max)}
             high={Math.max(min, max)}
             renderThumb={Thumb}
@@ -138,16 +142,16 @@ export default function FilterScreen({ navigation, route }: any) {
           </Text>
 
           <View style={styles.itemContainer}>
-            {mockSkinTypes.map(item => (
+            {initialFilter.skinTypes.map((item: ISkinType) => (
               <TouchableOpacity
                 key={item._id}
-                style={[styles.item, skinTypes.includes(item) && styles.selectedItem]}
+                style={[styles.item, selectedSkinTypes.includes(item) && styles.selectedItem]}
                 onPress={() => {
-                  if (skinTypes.includes(item)) setSkinTypes(skinTypes.filter(item => item._id !== item._id));
-                  else setSkinTypes((prev) => [...prev, item])
+                  if (selectedSkinTypes.includes(item)) setSelectedSkinTypes(selectedSkinTypes.filter(item => item._id !== item._id));
+                  else setSelectedSkinTypes((prev) => [...prev, item])
                 }}
               >
-                <Text style={[styles.itemText, skinTypes.includes(item) && styles.selectedItemText]}>{item.name}</Text>
+                <Text style={[styles.itemText, selectedSkinTypes.includes(item) && styles.selectedItemText]}>{item.name}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -160,16 +164,16 @@ export default function FilterScreen({ navigation, route }: any) {
           </Text>
 
           <View style={styles.itemContainer}>
-            {mockTags.map(item => (
+            {initialFilter.tags.map((item: ITag) => (
               <TouchableOpacity
                 key={item._id}
-                style={[styles.item, tags.includes(item) && styles.selectedItem]}
+                style={[styles.item, selectedTags.includes(item) && styles.selectedItem]}
                 onPress={() => {
-                  if (tags.includes(item)) setTags(tags.filter(item => item._id !== item._id));
-                  else setTags((prev) => [...prev, item])
+                  if (selectedTags.includes(item)) setSelectedTags(selectedTags.filter(item => item._id !== item._id));
+                  else setSelectedTags((prev) => [...prev, item])
                 }}
               >
-                <Text style={[styles.itemText, tags.includes(item) && styles.selectedItemText]}>{item.name}</Text>
+                <Text style={[styles.itemText, selectedTags.includes(item) && styles.selectedItemText]}>{item.name}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -180,7 +184,12 @@ export default function FilterScreen({ navigation, route }: any) {
         <TouchableOpacity
           style={[styles.button, { borderColor: Colors.primary, borderWidth: 1, }]}
           onPress={() => {
-            handleApply(NullFilter);
+            handleApply({
+              minPrice: 0,
+              maxPrice: initialFilter.maxPrice,
+              skinTypes: [],
+              tags: []
+            });
             navigation.goBack();
           }}
         >
@@ -192,8 +201,8 @@ export default function FilterScreen({ navigation, route }: any) {
             handleApply({
               minPrice: min,
               maxPrice: max,
-              skinTypes,
-              tags
+              skinTypes: selectedSkinTypes,
+              tags: selectedTags
             })
             navigation.goBack()
           }}

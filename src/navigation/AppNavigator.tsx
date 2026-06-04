@@ -30,6 +30,8 @@ import DarkModeScreen from "../screens/profile/DarkModeScreen";
 import LanguageSettingScreen from "../screens/profile/LanguageSettingScreen";
 import ForgotPasswordScreen from "../screens/auth/ForgotPassword";
 import MailSentScreen from "../screens/auth/MailSentScreen";
+import { IOrderItem } from "../types/orderItem";
+import WriteReviewScreen from "../screens/review/WriteReviewScreen";
 
 export type RootStackParamList = {
   AddressList: { withCheckbox?: boolean }
@@ -61,6 +63,7 @@ export type RootStackParamList = {
   ShippingInformation: { order_id: string }
   ViewHistory: undefined
   Wishlist: undefined
+  WriteReview: { orderId: string, items: IOrderItem[] }
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -110,6 +113,7 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="SearchResults" component={SearchResultScreen} />
       <Stack.Screen name="ViewHistory" component={ProductViewHistoryScreen} />
       <Stack.Screen name="Wishlist" component={WishlistScreen} />
+      <Stack.Screen name="WriteReview" component={WriteReviewScreen} />
     </Stack.Navigator>
   );
 }

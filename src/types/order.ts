@@ -33,7 +33,7 @@ export interface IOrderDetail {
   district: string;
   city: string;
 
-  reveive_time: string | null;
+  receive_time: string | null;
 
   createdAt: string;
   updatedAt: string;

@@ -60,7 +60,7 @@ const mockData: IOrderDetail = {
   district: "Quận Thủ Đức",
   city: "Tp. Hồ Chí Minh",
 
-  reveive_time: "2025-11-15T09:30:00",
+  receive_time: "2025-11-15T09:30:00",
 
   createdAt: "2025-11-15T09:30:00",
   updatedAt: "2025-11-15T09:30:00",
@@ -83,7 +83,8 @@ const getOrderStatus = (status: string) => {
   }
 }
 
-export default function OrderInformationScreen({ navigation, route }: any) {
+export default function OrderInformationScreen({ route }: any) {
+  const navigation = useAppNavigation();
   const { order_id } = route.params;
 
   const { showMessage } = useToast();
@@ -206,7 +207,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
             {data.receive_time && (
               <View style={styles.rowBetween}>
                 <Text style={styles.text400}>Completion time</Text>
-                <Text style={styles.text400}>{new Date(data.reveive_time).toLocaleString()}</Text>
+                <Text style={styles.text400}>{new Date(data.receive_time).toLocaleString()}</Text>
               </View>
             )}
           </View>
@@ -244,7 +245,7 @@ export default function OrderInformationScreen({ navigation, route }: any) {
                 <TouchableOpacity
                   style={[styles.button, { backgroundColor: Colors.primary, }]}
                   onPress={() => {
-
+                    navigation.navigate("WriteReview", { orderId: order_id, items: data.items });                    
                   }}
                 >
                   <Text style={[styles.buttonText, { color: Colors.textInverse }]}>Review</Text>

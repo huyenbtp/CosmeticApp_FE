@@ -20,7 +20,7 @@ export default function ReviewCard({ item }: { item: IReview }) {
           gap: 6
         }}>
           <Text style={styles.name}>
-            {item.username}
+            {item.user_full_name}
           </Text>
 
           <StarRating rating={item.rating} />

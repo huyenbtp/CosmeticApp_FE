@@ -89,12 +89,11 @@ export default function RegisterScreen() {
       {
         onSuccess: () => {
           showMessage("Registered successfully!");
-          navigation.replace("Login");
+          navigation.replace("MailSent", { type: "verify" });
         },
         onError: (error: any) => {
           showMessage(error.response?.data.message, "error")
           console.log("err: " + error.message);
-          
         }
       }
     );

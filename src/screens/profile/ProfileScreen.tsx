@@ -109,7 +109,7 @@ export default function ProfileScreen() {
           <View style={[styles.section, { paddingBottom: 24 }]}>
             <Text style={styles.sectionTitle}>General</Text>
 
-            <TouchableOpacity style={styles.row}>
+            <TouchableOpacity style={styles.row} onPress={() => navigation.navigate("ChangePassword")}>
               <View style={styles.row}>
                 <Feather name="unlock" size={20} style={styles.buttonIcon} />
                 <Text style={styles.generalItemText}>Change Password</Text>
@@ -125,7 +125,7 @@ export default function ProfileScreen() {
               <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.row}>
+            <TouchableOpacity style={styles.row} onPress={() => navigation.navigate("DarkMode")}>
               <View style={styles.row}>
                 <Feather name="moon" size={20} style={styles.buttonIcon} />
                 <Text style={styles.generalItemText}>Dark Mode</Text>
@@ -133,7 +133,7 @@ export default function ProfileScreen() {
               <Ionicons name="chevron-forward" size={15} color={Colors.textSecondary} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.row}>
+            <TouchableOpacity style={styles.row} onPress={() => navigation.navigate("LanguageSetting")}>
               <View style={styles.row}>
                 <MaterialIcons name="language" size={20} style={styles.buttonIcon} />
                 <Text style={styles.generalItemText}>Language</Text>

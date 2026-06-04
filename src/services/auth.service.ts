@@ -45,3 +45,30 @@ export const useMe = () => {
     queryFn: getMe,
   });
 };
+
+const changePassword = async (data: {
+  oldPassword: string;
+  newPassword: string;
+}) => {
+  const res = await axiosInstance.post("/auth/change-password", data);
+  return res.data;
+};
+
+export const useChangePassword = () => {
+  return useMutation({
+    mutationFn: changePassword,
+  });
+};
+
+const forgotPassword = async (data: {
+  email: string;
+}) => {
+  const res = await axiosInstance.post("/auth/forgot-password", data);
+  return res.data;
+};
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: forgotPassword,
+  });
+};

@@ -20,12 +20,16 @@ import SearchResultScreen from "../screens/search/SearchResultScreen";
 import OrderInformationScreen from "../screens/order/OrderInformation/OrderInformation";
 import ShippingInformationScreen from "../screens/order/OrderInformation/ShippingInformationScreen";
 import CheckoutScreen from "../screens/order/Checkout/CheckoutScreen";
-import { IUserAddress } from "../types/userAddress";
 import RegisterScreen from "../screens/auth/RegisterScreen";
 import ProductViewHistoryScreen from "../screens/profile/ViewHistoryScreen";
 import WishlistScreen from "../screens/profile/WishlistScreen";
 import ProductDescriptionScreen from "../screens/product/ProductDescriptionScreen";
 import OrderSuccess from "../screens/order/Checkout/OrderSuccess";
+import ChangePasswordScreen from "../screens/auth/ChangePasswordScreen";
+import DarkModeScreen from "../screens/profile/DarkModeScreen";
+import LanguageSettingScreen from "../screens/profile/LanguageSettingScreen";
+import ForgotPasswordScreen from "../screens/auth/ForgotPassword";
+import MailSentScreen from "../screens/auth/MailSentScreen";
 
 export type RootStackParamList = {
   AddressList: { withCheckbox?: boolean }
@@ -34,10 +38,14 @@ export type RootStackParamList = {
   CategoryProducts: { category_slug: string, category_name: string }
   ChangePassword: undefined
   Checkout: undefined
-  CreateEditAddress: {mode: "create" | "edit", editingAddress?: any}
+  CreateEditAddress: { mode: "create" | "edit", editingAddress?: any }
+  DarkMode: undefined
   EditProfile: undefined
   Filter: { initialFilter: IFilter, currentFilter: IFilter, handleApply: (filter: IFilter) => void }
+  ForgotPassword: undefined
+  LanguageSetting: undefined
   Login: undefined
+  MailSent: { type: "verify" | "forgot_password" }
   Main: undefined
   MyOrders: { initialRoute: string }
   Onboarding: undefined
@@ -78,11 +86,16 @@ export default function AppNavigator({ initialRoute = "Login" }: { initialRoute:
       <Stack.Screen name="BrandProducts" component={BrandProductsScreen} />
       <Stack.Screen name="Cart" component={CartScreen} />
       <Stack.Screen name="CategoryProducts" component={CategoryProductsScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} />
       <Stack.Screen name="CreateEditAddress" component={CreateEditAddressScreen} />
+      <Stack.Screen name="DarkMode" component={DarkModeScreen} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
       <Stack.Screen name="Filter" component={FilterScreen} />
+      <Stack.Screen name="LanguageSetting" component={LanguageSettingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="MailSent" component={MailSentScreen} />
       <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="OrderInformation" component={OrderInformationScreen} />

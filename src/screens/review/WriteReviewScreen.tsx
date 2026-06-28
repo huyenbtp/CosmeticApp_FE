@@ -15,22 +15,24 @@ import { IOrderItem } from "../../types/orderItem";
 import { IWriteReview } from "../../types/review";
 import Header from "../../components/common/Header";
 import WriteReviewCard from "../../components/review/WriteReviewCard";
+import { useCreateReviews } from "../../services/review.service";
+import { useAppNavigation } from "../../navigation/useAppNavigation";
 
 type RouteProps = RouteProp<RootStackParamList, "WriteReview">;
 
 export default function WriteReviewScreen() {
   const route = useRoute<RouteProps>();
+  const navigation = useAppNavigation();
+  const { mutateAsync: submitReviews } = useCreateReviews();
 
-  const {
-    orderId,
-    items,
-  } = route.params;
+  const { orderId, items } = route.params;
   const [isPending, setIsPending] = useState(false);
-
   const [isAnonymous, setIsAnonymous] = useState(false);
+
   const [reviews, setReviews] = useState<IWriteReview[]>(
     items.map((item: IOrderItem) => ({
       product_id: item.product_id,
+      order_item_id: item._id,
       rating: 5,
       comment: "",
     }))
@@ -51,17 +53,49 @@ export default function WriteReviewScreen() {
   };
 
   const handleSubmit = async () => {
+    const handleSubmit = async () => {
+      // ===== VALIDATE comment: 20–255 ký tự =====
+      for (const r of reviews) {
+        const len = r.comment.trim().length;
+        if (len < 20) {
+          Alert.alert("Lỗi", "Mỗi đánh giá phải có ít nhất 20 ký tự.");
+          return;
+        }
+        if (len > 255) {
+          Alert.alert("Lỗi", "Mỗi đánh giá không được vượt quá 255 ký tự.");
+          return;
+        }
+      }
+
+      try {
+        setIsPending(true);
+        await submitReviews({ reviews, anonymous: isAnonymous });
+        Alert.alert("Thành công", "Cảm ơn bạn đã đánh giá sản phẩm.", [
+          { text: "OK", onPress: () => navigation.goBack() },
+        ]);
+      } catch (error: any) {
+        Alert.alert(
+          "Lỗi",
+          error?.response?.data?.message ||
+          error?.message ||
+          "Không thể gửi đánh giá"
+        );
+      } finally {
+        setIsPending(false);
+      }
+    };
     try {
       setIsPending(true);
-
-      Alert.alert(
-        "Thành công",
-        "Cảm ơn bạn đã đánh giá sản phẩm."
-      );
+      await submitReviews({ reviews, anonymous: isAnonymous });
+      Alert.alert("Thành công", "Cảm ơn bạn đã đánh giá sản phẩm.", [
+        { text: "OK", onPress: () => navigation.goBack() },
+      ]);
     } catch (error: any) {
       Alert.alert(
         "Lỗi",
-        error?.message || "Không thể gửi đánh giá"
+        error?.response?.data?.message ||
+        error?.message ||
+        "Không thể gửi đánh giá"
       );
     } finally {
       setIsPending(false);
@@ -116,9 +150,7 @@ export default function WriteReviewScreen() {
           onPress={handleSubmit}
         >
           <Text style={styles.submitText}>
-            {isPending
-              ? "Sending..."
-              : "Send"}
+            {isPending ? "Sending..." : "Send"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -144,7 +176,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12
+    gap: 12,
   },
 
   bottomBar: {
@@ -157,16 +189,16 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 50,
     borderRadius: 8,
-    backgroundColor: Colors.primary,
-    justifyContent: "center",
+    backgroundColor: Colors.secondary,
     alignItems: "center",
+    justifyContent: "center",
   },
   disabledButton: {
-    opacity: 0.7,
+    opacity: 0.6,
   },
   submitText: {
-    color: "#FFF",
-    fontWeight: "600",
+    color: Colors.textInverse,
     fontSize: 16,
+    fontWeight: "600",
   },
 });

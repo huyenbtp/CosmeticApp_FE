@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAppNavigation } from "../../navigation/useAppNavigation";
 import ReviewCard from "../../components/review/ReviewCard";
 import Header from "../../components/common/Header";
+import { useProductReviews } from "../../services/review.service";
 
 const mockReviews: IReview[] = [
   {
@@ -65,10 +66,11 @@ const mockReviews: IReview[] = [
   },
 ]
 
-export default function ReviewListScreen() {
+export default function ReviewListScreen({route}: any) {
   const navigation = useAppNavigation();
+  const { product_id: productId } = route.params;
 
-  const data = mockReviews;
+  const { data = [], isLoading } = useProductReviews(productId);
 
   return (
     <View style={styles.container}>

@@ -77,6 +77,7 @@ export default function WriteReviewCard({
         style={styles.commentInput}
         placeholder="Please share your thoughts on the product..."
         multiline
+        maxLength={255}
         textAlignVertical="top"
         value={review.comment}
         onChangeText={(text) =>

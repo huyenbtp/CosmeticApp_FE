@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://skintify-uit.onrender.com",
+  baseURL: "http://192.168.110.155:5000",
   timeout: 10000,
 });
 
